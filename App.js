@@ -14,14 +14,15 @@ import {
   View,
   Text,
   StatusBar,
+
 } from 'react-native';
+
+import Navigation from "./src/navigation/navigation";
 
 
 const App: () => React$Node = () => {
   return (
-   <Text> 
-     It's work!! just the first test for my todo app...
-   </Text>
+    <Navigation/>
   );
 };
 
