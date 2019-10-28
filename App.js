@@ -8,21 +8,22 @@
 
 import React from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
 
 } from 'react-native';
 
 import Navigation from "./src/navigation/navigation";
 
+import {Provider} from 'react-redux';
+import Store from './src/store/ConfigureStore';
+
 
 const App: () => React$Node = () => {
+
   return (
-    <Navigation/>
+    <Provider store={Store}>
+          <Navigation/>
+    </Provider>
   );
 };
 

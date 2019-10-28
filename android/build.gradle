@@ -8,11 +8,25 @@ buildscript {
         targetSdkVersion = 28
     }
     repositories {
-        google()
         jcenter()
+        google()  
     }
+
+    // android {
+    //     defaultConfig {
+    //         minSdkVersion 15 
+    //         targetSdkVersion 28
+    //         multiDexEnabled true
+    //     }
+    // }
+
+
     dependencies {
         classpath("com.android.tools.build:gradle:3.4.2")
+        // def multidex_version = "2.0.1"
+        // implementation 'androidx.multidex:multidex:$multidex_version'
+
+        //   5.6.3
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -22,6 +36,7 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
+        
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url("$rootDir/../node_modules/react-native/android")
@@ -32,7 +47,30 @@ allprojects {
         }
 
         google()
-        jcenter()
-        maven { url 'https://jitpack.io' }
+        
+        maven { url 'https://jitpack.io'
+        
+        jcenter() }
     }
 }
+
+
+// subprojects {
+//   project.configurations.all {
+//       afterEvaluate {project ->
+//         if (project.hasProperty("android")) {
+//             android {
+//                 compileSdkVersion 26
+//                 buildToolsVersion '26.0.2'
+//             }
+//         }
+//     }
+//      resolutionStrategy.eachDependency { details ->
+//         if (details.requested.group == 'com.android.support'
+//               && !details.requested.name.contains('multidex') ) {
+//            details.useVersion "26.0.2"
+//         }
+//      }
+//   }
+// }       
+

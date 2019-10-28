@@ -10,6 +10,9 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
+
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -34,6 +37,13 @@ public class MainApplication extends Application implements ReactApplication {
         }
       };
 
+      // @Override
+      // protected void attachBaseContext(Context base) {
+      //   super.attachBaseContext(base);
+      //   MultiDex.install(this);
+      // }
+
+
   @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;
@@ -44,6 +54,8 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
+
+    BackgroundTaskPackage.useContext(this);//configuration for needed of back ground working
   }
 
   /**
@@ -71,4 +83,5 @@ public class MainApplication extends Application implements ReactApplication {
       }
     }
   }
+
 }

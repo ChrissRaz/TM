@@ -5,36 +5,67 @@ import FontAwesome, { SolidIcons, RegularIcons, BrandIcons } from 'react-native-
 import { Icon } from 'react-native-elements';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faDonate, faQrcode } from '@fortawesome/free-solid-svg-icons'
+import { faQrcode } from '@fortawesome/free-solid-svg-icons'
+import CalendarPicker  from 'react-native-calendar-picker';
 
-export default class Callendrier extends Component {
+import {connect} from 'react-redux';
+
+ 
+
+
+class Callendrier extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      enrolled: false,
-      nb: 0
+  
     };
 
-    library.add(faQrcode);
+
+    
   }
+
+  _calledarShow()
+  {
+
+    
+
+    // console.log(this.db)
+
+
+    const action = {type: "TOGGLE_ENROLE_DATE"};
+    this.props.dispatch(action);
+
+  
+    
+  }
+
+  _onDateChange()
+  {
+    
+  }
+
+  componentDidUpdate()
+  {
+    console.log("reloading");
+    // console.log(this.state);
+  }
+
+  
 
   render() {
     return (
       <View>
-        <TouchableOpacity style={styles.test} onPress = {(e)=>this.setState(prevState => ({nb: prevState.nb+1}))}>
-            <Text>{this.state.nb}</Text>
-            {/* <FontAwesome icon={SolidIcons.smile} /> */}
-            <Text>click on me</Text>
-           
-
+        <TouchableOpacity style={styles.enroleButton} onPress = {(e)=>{this._calledarShow()}}>
+            <Text>Mon Callendrier</Text>
             <FontAwesomeIcon icon={ faQrcode } />
-
-
            
         </TouchableOpacity>
 
-
-        
+        { 
+          !this.props.enroleState && < CalendarPicker
+          onDateChange={this._onDateChange }
+        />
+        }
 
       </View>
     );
@@ -44,9 +75,16 @@ export default class Callendrier extends Component {
 
 const styles = StyleSheet.create(
   {
-    test:
+    enroleButton:
     {
-      backgroundColor: "red"
+      backgroundColor: "red",
+      flexDirection: "row",
     }
   }
 );
+
+const mapStateToProps = (state) => {
+  return {enroleState:  state.enroleState}
+}
+
+export default connect(mapStateToProps)(Callendrier);
