@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, Alert } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { View, Text, Alert, TouchableOpacity } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
-import {Button , ThemeProvider} from "react-native-elements"
+import {Button , ThemeProvider} from "react-native-elements";
+import * as Progress from 'react-native-progress';
 
 
 
@@ -27,14 +27,27 @@ export default class TaskItem extends Component {
   render() {
     return (
       <TouchableOpacity onPress={this._showActions }>
-        <ThemeProvider>
-          <Button title="test"></Button>
-        </ThemeProvider>
-        <Text> {this.props.task.description } </Text>
-        <View>
-          <Text>{moment(this.props.task.duree).format("hh:mm")}</Text>
-          <Text>{moment(this.props.task.duree).format("hh:mm")}</Text>
-        </View> 
+
+        <TouchableOpacity onPress={this._showActions }>
+            <Progress.Pie progress={0.4} size={50} />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={this._showActions }>
+            <Text> {this.props.task.description } </Text>
+            <View>
+              <Text>{moment(this.props.task.duree).format("hh:mm")}</Text>
+              <Text>{moment(this.props.task.duree).format("hh:mm")}</Text>
+            </View> 
+        </TouchableOpacity>
+
+        <TouchableOpacity  onPress={this._showActions }>
+          <Text>
+            Play
+          </Text>
+        </TouchableOpacity>
+
+
+        
       </TouchableOpacity>
     );
   }

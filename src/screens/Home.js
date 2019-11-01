@@ -10,7 +10,6 @@ import TaskItem from '../modules/TaskItem';
 // import { Icon } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import SQLite from "react-native-sqlite-2";
 import {} from "react-native-sqlite-storage";
 
 export default class Home extends Component {
@@ -39,18 +38,16 @@ export default class Home extends Component {
     ];
 
 
-    this.db = SQLite.openDatabase("database/TMDB.db", "1.0", "", 1);
-
     console.log(this.db);
 
-    this.db.transaction(function(txn) {
-      txn.executeSql("SELECT * FROM `TASK`", [], (tx, res) => {
-          console.log("fech terminated")
-        for (let i = 0; i < res.rows.length; ++i) {
-          console.log("item:", res.rows.item(i));
-        }
-      });
-    });
+    // this.db.transaction(function(txn) {
+    //   txn.executeSql("SELECT * FROM `TASK`", [], (tx, res) => {
+    //       console.log("fech terminated")
+    //     for (let i = 0; i < res.rows.length; ++i) {
+    //       console.log("item:", res.rows.item(i));
+    //     }
+    //   });
+    // });
       
     
   }
@@ -62,7 +59,7 @@ export default class Home extends Component {
 
     return (
       <View style={styles.base}>
-        <Icon name='g-translate' color='#00aced' />
+        <Icon name='music' color='#00aced' />
 
         <Menu style ={styles.Header}/>
          

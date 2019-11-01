@@ -1,10 +1,13 @@
-import { createAppContainer } from "react-navigation";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import  {createStackNavigator} from "react-navigation-stack";
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import Home from '../screens/Home';
 import AddTask from '../screens/AddTask';
 import Parametre from '../screens/Parametre';
+import Splash from '../screens/Splash';
+
+
 
 
 const AppNavigator = createStackNavigator({
@@ -39,6 +42,16 @@ const BaseNav =  createDrawerNavigator({
     activeTintColor: '#e91e63',
   },
 });
+
+const LoadDataNavigator = createSwitchNavigator ({
+  Splash: {
+    screen: Splash,
+  },
+  Base: {
+    screen: BaseNav,
+  },
+
+});
   
   
-  export default createAppContainer(BaseNav);
+  export default createAppContainer(LoadDataNavigator);

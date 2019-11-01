@@ -8,8 +8,8 @@ buildscript {
         targetSdkVersion = 28
     }
     repositories {
-        jcenter()
         google()  
+        jcenter()
     }
 
     // android {
