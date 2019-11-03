@@ -1,82 +1,136 @@
 import React, { Component } from 'react';
-import { View, Text ,StyleSheet } from 'react-native';
-import Callendrier from '../modules/Callendrier';
-import Menu from '../modules/Menu';
+import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
+
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faEquals } from '@fortawesome/free-solid-svg-icons';
+import { faStream } from '@fortawesome/free-solid-svg-icons';
+
 import TaskItem from '../modules/TaskItem';
 
-// import { Icon } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Header } from "react-native-elements";
 
-import {} from "react-native-sqlite-storage";
+import { connect } from 'react-redux';
 
-export default class Home extends Component {
+
+import { } from "react-native-sqlite-storage";
+
+
+var moment = require("moment");
+
+import * as Progress from 'react-native-progress';
+
+
+
+class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
 
-      this.tasks = [
-        {
-        IdTask: "1",
-        description: "Etudes et Travail",
-        duree: 5,
-        date: "22-12-2019",
-        actif: null,
-        history: [{IdHistory:"1", dateDebut: 5000000, dateFin: 520000}, {IdHistory:"1", dateDebut: 521000, dateFin: 521000}]
-      },
-      {
-        IdTask: "2",
-        description: "Etude et autres",
-        duree: 28800,
-        date: "22-12-2019",
-        actif: "1",
-        history: [{IdHistory:"1", dateDebut: 521000, dateFin: null}]
-      }
-    ];
 
+    this.activeTask = this.props.dataManager.tasks.find(item => item.actif === true);
 
-    console.log(this.db);
-
-    // this.db.transaction(function(txn) {
-    //   txn.executeSql("SELECT * FROM `TASK`", [], (tx, res) => {
-    //       console.log("fech terminated")
-    //     for (let i = 0; i < res.rows.length; ++i) {
-    //       console.log("item:", res.rows.item(i));
-    //     }
-    //   });
-    // });
-      
-    
   }
 
-  
+  _optionsShow() {
+    console.log("show options");
+  }
+
+  _SwichDefaulftConfig() {
+    console.log("default config");
+  }
+
+  _navigateNouveauRoutine() {
+    console.log("nouveau routine");
+  }
+
+  _showActiveDetails()
+  {
+    if (this.activeTask!=null)
+    {
+      console.log("détails de la tâche active");
+    }
+    else
+    {
+      console.warn("Aucune tache active");
+    }
+  }
+
 
   render() {
 
-
     return (
-      <View style={styles.base}>
-        <Icon name='music' color='#00aced' />
+      <View style={ { backgroundColor: this.props.configuration.theme.l5 , flex: 1}}>
+          <Header
+            style={styles.Header}
 
-        <Menu style ={styles.Header}/>
-         
-         {
-           this.tasks.length > 0 ? 
-           <FlatList style= {styles.TaskList}
-           data={this.tasks}
-           renderItem={({ item }) => <TaskItem task={item}/>}
-           keyExtractor={item => item.IdTask}
-           /> 
-           :
-           <View>
+            leftComponent={
+              <TouchableOpacity onPress={(e) => this._optionsShow()}>
+                <FontAwesomeIcon size={30} icon={faStream} style={{ color: this.props.configuration.theme.l4 }} />
+              </TouchableOpacity>
+            }
+            centerComponent={{ text: 'About Today', style: { color: this.props.configuration.theme.l4, fontSize: 25 } }}
+            
+            backgroundColor={this.props.configuration.theme.l1}
+            barStyle="light-content"
+            placement="right"
+          />
+
+
+          {/* Affichage de la tache active */}
+          {
+            
+            this.activeTask != null ?
+              <TouchableOpacity style={styles.activeTask} onPress={this._showActiveDetails}>
+                <Progress.Circle color={["red"]} borderRadius={10} showsText={true} progress={0.8} size={125}  style= {styles.progressCircle}/>
+
+                <View style={styles.timeContainer }>
+                  <Text style= {{fontWeight:'bold', fontSize: 20}}> {this.activeTask.description}   </Text>
+                  <Text style={styles.time}>   {moment(this.activeTask.duree).format("HH:mm")}   </Text>
+                  <Text style={styles.time}>   {moment(this.activeTask.duree).format("HH:mm")}   </Text>
+                  
+                </View>
+              </TouchableOpacity> 
               
-           </View>
-           
-         }
-        
+              : 
+
+              <View>
+              </View>
+
+          }
+
+
+          {
+            this.props.dataManager.tasks.length > 0 ?
+
+                <View style={styles.TaskList}>
+                  <FlatList 
+                  data={this.props.dataManager.tasks.filter((item, index)=> item.actif===false)}
+                  renderItem={({ item }) => <TaskItem task={item} />}
+                  keyExtractor={item => item.IdTask}
+                />
+                </View>
+                
+
+
+              :
+              
+              <View >
+                <Text>
+                  Vous avec définit aucune tâche journalière
+                  On vous propose d'usiliser d'usiliser celui qu'on a définit par défaut pour vous!!
+                  </Text>
+
+                <View style={styles.confirmBtn}>
+                  <Button title="ça me va" onPress={(e) => this._SwichDefaulftConfig} />
+                  <Button title="Crérer un nouveau" onPress={(e) => this._navigateNouveauRoutine} />
+                </View>
+
+
+              </View>
+
+          }
+
       </View>
 
     );
@@ -89,20 +143,51 @@ const styles = StyleSheet.create(
     base:
     {
       flex: 1,
-      justifyContent: "space-around",
-      alignContent: "space-around"
+     
     },
-    Header:
+
+    activeTask:
     {
-      flex: 2,
-
+      alignItems: "center",
+      paddingTop: 20,
+      backgroundColor:  "green"
     },
-
+    progressCircle:
+    {
+      marginBottom: 20
+    },
+    timeContainer:
+    {
+      
+      flexDirection: "row",
+      justifyContent: "space-around",
+    },
+    time:
+    {
+      fontSize: 20,
+      color: "brown"
+    },
     TaskList:
     {
-      flex: 8,
-      alignContent: "space-between",
-      
+
+      paddingTop:10,
+      backgroundColor: "red"
+
+    },
+    confirmBtn:
+    {
+      flexDirection: "row",
+      justifyContent: "space-around",
     }
   }
 );
+
+const mapStateToProps = (state) => {
+
+  return {
+    configuration: state.configuration,
+    dataManager: state.dataManager
+  }
+}
+
+export default connect(mapStateToProps)(Home);

@@ -4,7 +4,7 @@ import DateReducer from "./DateReducer";
 import { combineReducers } from "redux";
 
 
-const rootReducer = combineReducers({configuration: configure, timer: taskUpdate});
+const rootReducer = combineReducers({configuration: configure, dataManager: taskUpdate});
 
 
 export default rootReducer;

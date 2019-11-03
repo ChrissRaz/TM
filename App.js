@@ -23,7 +23,7 @@ const App: () => React$Node = () => {
 
   return (
     <Provider store={Store}>
-          <Navigation/>
+          <Navigation style={{flex: 1}}/>
     </Provider>
   );
 };

@@ -6,13 +6,13 @@ import {connect} from 'react-redux';
 const logo = require("../assets/TMLogo.png");
 
 
-export default class Splash extends Component {
+class Splash extends Component {
   constructor(props) {
     super(props);
     this.state = {
     };
 
-    console.log(this.props);
+    // console.log(this.props.parametre);
   }
 
 
@@ -53,6 +53,7 @@ const styles = StyleSheet.create(
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
+            // backgroundColor: () => this.props.configuration.l1,
             backgroundColor: "#fce5e5"
 
         },
@@ -81,3 +82,11 @@ const styles = StyleSheet.create(
         }
     }
 );
+
+
+const mapStateToProps = (state) => {
+
+  return {configuration:  state.configuration}
+}
+
+export default connect(mapStateToProps)(Splash);

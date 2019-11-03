@@ -4,29 +4,28 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import Home from '../screens/Home';
 import AddTask from '../screens/AddTask';
+import TaskDetails from '../screens/TaskDetails';
 import Parametre from '../screens/Parametre';
 import Splash from '../screens/Splash';
 
 
 
 
-const AppNavigator = createStackNavigator({
+const TaskNav = createStackNavigator({
     Home: {
       screen: Home,
     },
-  }, 
-  {
-    navigationOptions: {
-      headerMode: 'none',
-    }
+    Details:{
+      screen: TaskDetails
+    },
   });
 
 
 const BaseNav =  createDrawerNavigator({
   Home: {
-    screen: Home,
+    screen: TaskNav,
     navigationOptions: ({ navigation }) => ({
-      title: "Mon organisation aujourd'hui",
+     
     }),
   },
   Parametre: {
@@ -47,7 +46,7 @@ const LoadDataNavigator = createSwitchNavigator ({
   Splash: {
     screen: Splash,
   },
-  Base: {
+  Base:{
     screen: BaseNav,
   },
 
