@@ -9,10 +9,11 @@ export const defaultTasks =  [
         date: null,
         description: "Sleep",
         duree: 28800,
-        actif: false,
+        actif: true,
         history: [],
         childs:  [],
         next: null,
+        order: 0,
         notifyBeforeEnding: true,
         notifyBegining: true,
         notifyBeforeEndingDuration: 5
@@ -22,11 +23,12 @@ export const defaultTasks =  [
         IdTask: null,
         date: null,
         description: "Works and Study",
-        duree: 28800,
-        actif: true,
+        duree: 32100,
+        actif: false,
         history: [],
         childs:  [],
         next: null,
+        order: 1,
         notifyBeforeEnding: true,
         notifyBegining: true,
         notifyBeforeEndingDuration: 5
@@ -36,15 +38,17 @@ export const defaultTasks =  [
         IdTask: null,
         date: null,
         description: "Divertissement and Others",
-        duree: 28800,
+        duree: 25500,
         actif: false,
         history: [],
         childs:  [],
         next: null,
+        order: 2,
         notifyBeforeEnding: true,
         notifyBegining: false,
         notifyBeforeEndingDuration: 5
       },
+      
 
 ];
 
@@ -55,8 +59,11 @@ export const Defaultconfigs = {
     notify: true,
     notifyBegining: true,
     notifyBeforeEnding: true,
+    notifyJourneyBegining: false,
     notifyBeforeEndingDuration: 5,
     lastIndexTask: 0,
+    autoSwitchToDefautlTaskAtEndOfJourney: true,
+
 }
 
 export const defaultUserTasks = { 

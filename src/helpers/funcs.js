@@ -33,7 +33,6 @@ export function getAvailableTime(task) {
 
     task.history.forEach((el) => {
         lost += el.dateFin - el.dateDebut;
-
     });
 
     return task.duree - lost;
@@ -95,23 +94,37 @@ export const findTodayTask = async () => {
             if (filtred.length > 0) {
 
                 //ordering the chain of tasks
-                filtred.sort((a, b) => {
-                    return a.next - b.next;
+                filtred.sort((a, b) => a.order - b.order);
+
+
+
+                //Checking if tasks worked
+                let worked=false;
+
+                filtred.forEach(element => {
+                    if (element.history.length>0)
+                    {
+                        worked = true;
+                    }
                 });
 
+                if (!worked)
+                {
+                    return { tasks: filtred };
+                }
 
-                //evaluating lost time whe the app was innactive
-                let lastWorkingTime = filtred.find(el => el.actif == true);
+            
+                //evaluating losted time when the app was innactive and verify if the task was stated before
+                let lastWorkedTask = filtred.find(el => el.actif == true);
 
-
-                lastWorkingTime = lastWorkingTime.history[lastWorkingTime.history.length - 1].dateFin;
+                let lastWorkingTime = lastWorkedTask.history[lastWorkedTask.history.length - 1].dateFin;
 
 
                 let assignedElapsedTime = 0;
 
                 let lastHistoryAsigned = lastWorkingTime;
 
-                filtred = filtred.map(
+                filtred = filtred.map (
                     el => {
                         let TimeElapsedOff = Math.floor((Date.now() / 1000) - lastWorkingTime);
 
@@ -163,8 +176,7 @@ export const findTodayTask = async () => {
 
                 return { tasks: filtred };
             }
-            else
-            {
+            else {
                 return {
                     tasks: []
                 };
@@ -188,7 +200,6 @@ export const findTodayTask = async () => {
         };
     }
 };
-
 
 
 //Sotoring data persist  funcs
@@ -245,7 +256,7 @@ export const addTasks = async (datas: Object, date = new Date()) => {
 
                         //tasks are linked like a cahin , the last is linked with the first and an task is linked 
                         //with the next task
-                        el.next = i != datas.length ? el.IdTask +1 : el.IdTask-i;
+                        el.next = i != datas.length - 1 ? el.IdTask + 1 : el.IdTask - i;
 
 
 
@@ -309,7 +320,7 @@ export const addTasks = async (datas: Object, date = new Date()) => {
 
                     // just select data fromat another date in the filter and concat new datas with it
                     add("userTasks", finalToSave).then(
-                        sv => console.log("new datas added succesfully for "+dt)
+                        sv => console.log("new datas added succesfully for " + dt)
                     );
                     add("settings", settingsData);
 
@@ -333,8 +344,6 @@ export const addTasks = async (datas: Object, date = new Date()) => {
 
 
 };
-
-
 
 
 export const updateTask = async (task: Object) => {
@@ -367,70 +376,262 @@ export const updateTask = async (task: Object) => {
 
 };
 
-export const switchTask = async (IdT) => {
-    try {
-        let value = await AsyncStorage.getItem('userTasks').then(
-            data => data);
 
+export const switchTask = async (IdT, alert = false) => {
 
-        if (value != null) {
-            value = JSON.parse(value);
+    if (IdT == null) {
+        //switch de fin de journée
+        let nextDay = new Date(Math.floor(Date.now()/1000)+3600);
 
+        let nexDayTask = await findTodayTask(nextDay);
 
-            let nextT = value.tasks.find(
-                el => el.IdTask == IdT
+        let settings = await AsyncStorage.getItem("settings");
+        settings = JSON.parse(settings);
 
-            );
-            let lastT = value.tasks.find(
-                el => el.actif == true
+        if (nexDayTask.tasks.length==0)
+        {
+            if (settings.autoSwitchToDefautlTaskAtEndOfJourney)
+            {
+                let def = await findAll("tasks");
 
-            );
-
-            lastT.actif = false;
-            nextT.actif = true;
-
-            // console.warn(lastT);
-            // console.warn(nextT);
-
-            nextT.history.push({ dateDebut: lastT.history[lastT.history.length - 1].dateFin, dateFin: Math.floor(Date.now() / 1000), off: false });
-
-            let toSave = {
-                ...value,
-                tasks: value.tasks.map(
-                    el => {
-
-
-                        if (el.IdTask == lastT.IdTask) {
-                            return lastT;
-                        }
-
-                        if (el.IdTask == nextT.IdTask) {
-                            return nextT;
-                        }
-
-                        return el;
+                setTimeout(()=>{
+                    if (settings.notifyJourneyBegining && settings.notify)
+                    {
+                        //notify user about journey begining
                     }
-                )
-            };
+                    
+                    //add task dispach all data automaticaly
+                    addTasks(def.tasks);
+                },2000);
 
-            add("userTasks", toSave);
+                return;
+            }
+            else
+            {
+                nexDayTask = {
+                    tasks: []
+                };
+            }
+        }
+        else
+        {
 
+            nexDayTask.tasks= nexDayTask.tasks.map(
+                e =>
+                {
+                    if (e.actif)
+                    {
+                        nextDay.setHours(0,0,0);
+                        e.history.push({dateDebut: nextDay.valueOf() , dateFin: Math.floor(Date.now() / 1000)+2 , off: false})
+                        
+                 }
 
-
-            let today = toSave.tasks.filter(
-                el => el.date == formatDate(new Date())
-
+                    return e;
+                }
             );
 
-            // console.log(today.map(e => e.history));
+            await updateTask(nexDayTask.tasks.find(e => e.actif==true));
+        }
 
-            console.warn("swiching");
-            // console.log(today);
-            Store.dispatch({ type: "CONFIGURE_TODAY_TASK", value: today });
 
+        if (alert)
+        {
+            if (settings.notify && settings.notifyJourneyBegining)
+            {
+                //notify
+            }
+            
+        }
+
+        console.warn("swiching");
+        // console.log(today);
+
+        setTimeout(()=>{
+            Store.dispatch({ type: "CONFIGURE_TODAY_TASK", value: nexDayTask.tasks });
+        },2000);
+
+        
+    }
+    else {
+        try {
+            let value = await AsyncStorage.getItem('userTasks').then(
+                data => data);
+
+
+            if (value != null) {
+                value = JSON.parse(value);
+
+
+                let nextT = value.tasks.find(
+                    el => el.IdTask == IdT
+
+                );
+
+
+                let lastT = value.tasks.find(
+                    el => el.actif == true
+
+                );
+
+                lastT.actif = false;
+                nextT.actif = true;
+
+                lastT.order = nextT.order;
+                nextT.order = lastT.order;
+
+                // console.warn(lastT);
+                // console.warn(nextT);
+
+                nextT.history.push({ dateDebut: lastT.history[lastT.history.length - 1].dateFin, dateFin: Math.floor(Date.now() / 1000), off: false });
+
+                let toSave = {
+                    ...value,
+                    tasks: value.tasks.map(
+                        el => {
+
+
+                            if (el.IdTask == lastT.IdTask) {
+                                return lastT;
+                            }
+
+                            if (el.IdTask == nextT.IdTask) {
+                                return nextT;
+                            }
+
+                            return el;
+                        }
+                    )
+                };
+
+                add("userTasks", toSave);
+
+
+                let today = toSave.tasks.filter(
+                    el => el.date == formatDate(new Date())
+                );
+
+                // console.log(today.map(e => e.history));
+
+                if (alert)
+                {
+                   let settings = await findAll("settings");
+                   settings = JSON.parse(settings);
+                   id (settings.notify && settings.notifyBegining)
+                   {
+                       //Lancer une notification  que la tâche viens de commencer
+                   }
+                   
+                }
+                console.warn("swiching");
+                // console.log(today);
+                Store.dispatch({ type: "CONFIGURE_TODAY_TASK", value: today });
+
+            }
+        }
+        catch (err) {
+            //alerter et fermer l'appplication après
+            console.warn(" erreur dans switchTask (func): " + err);
         }
     }
-    catch (err) {
-        console.warn(" erreur dans switchTask (func): " + err);
-    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+// if (availableTasks.length == 0) {
+
+                //   console.log("fin de la journée");
+                //   //fin de la journée
+
+                //   isJourneEnding = true;
+                //   setTimeout(event =>{
+                //     h.findTodayTask().then(
+                //       data =>{
+                //         if (data.tasks.length==0)
+                //         {
+                //           h.findAll("tasks").then(
+                //             dt => { 
+
+                //               h.addTasks([...dt]);
+                //           }
+                //           );
+                //         }
+                //         else
+                //         {
+                //           //????
+                //           nextJourneyTask = data.tasks;
+                //         }
+                //       }
+                //     );
+                //   },1000);
+                // }
+                // else {
+
+                //   //passer au tache suivante
+                //   nxt = availableTasks.find(elem => elem.IdTask == el.next);
+                //   if (nxt) {
+
+                //     nxt = nxt.IdTask;
+
+                //   }
+                //   else if (availableTasks.length == 1) {
+                //     nxt = availableTasks[0].IdTask;
+                //   }
+                //   else {
+
+                //     let cur = el.IdTask;
+
+
+                //     state.tasks.forEach(
+                //       element, i => {
+                //         if ((element.IdTask == cur) && nxt == undefined) {
+
+
+                //           //find fils de l'élémnt courant
+                //           let found = state.tasks.find(
+                //             e => e.IdTask = element.next
+                //           );
+
+                //           cur = found.next;
+
+                //           if (h.getAvailableTime(found) > 0) {
+                //             nxt = found.IdTask;
+                //           }
+                //         }
+
+                //         //dans le cas ou la tache actuel est au milieu les élément d'avant ne son pas analysés
+                //         //donc il faut refaire la recher che depuis le début puis que le début est lié au dernier
+                //         if ((i + 1) == state.tasks.length && nxt == undefined) {
+                //           state.tasks.forEach(
+                //             elmnt => {
+                //               if ((elmnt.IdTask == cur) && nxt == undefined) {
+
+                //                 //find fils de l'élémnt courant
+                //                 let found = state.tasks.find(
+                //                   e => e.IdTask = elmnt.next
+                //                 );
+
+                //                 cur = found.next;
+
+                //                 if (h.getAvailableTime(found) > 0) {
+                //                   nxt = found.IdTask;
+                //                 }
+                //               }
+                //             }
+                //           );
+
+                //         }
+                //       }
+                //     );
+
+
+                //   }
+                // }

@@ -64,7 +64,6 @@ const GlobalTaskNav = createStackNavigator({
 const BaseNav = createDrawerNavigator({
   Home: {
     screen: TaskNav,
- 
   },
 
   TaskLists: {

@@ -14,7 +14,7 @@ const currentTaskState = {
 function taskUpdate(state = currentTaskState, action) {
 
   let nextState;
-  let isJourneEnding =false;
+  let isJourneEnding = false;
   let nextJourneyTask;
 
   switch (action.type) {
@@ -24,121 +24,62 @@ function taskUpdate(state = currentTaskState, action) {
         ...state,
         tasks: state.tasks.map(
           (el) => {
-            if (el.actif==true) {
+            if (el.actif == true) {
 
+              //findind available time
               let avTime = h.getAvailableTime(el);
 
-              if (avTime > 0) {
+              if (avTime > 2) {
                 // console.log(avTime);
                 el.history[el.history.length - 1].dateFin = Math.floor(Date.now() / 1000);
                 h.updateTask(el);
                 if ((avTime == el.notifyBeforeEndingDuration * 60) && el.notifyBeforeEnding) {
-                  console.log("Le tast "+el.description+" va se teminer apre "+el.notifyBeforeEndingDuration+" minutes");
+                  console.log("Le tast " + el.description + " va se teminer apre " + el.notifyBeforeEndingDuration + " minutes");
+                  
+                  try 
+                  {
+                    AsyncStorage.getItem("settings").then(
+                      data => 
+                      {
+                        data = JSON.parse(data);
+                        if (data.notifyBeforeEnding)
+                        {
+                          //Launch an notification
+                        }
+                      }
+                    );
+                  }catch(err)
+                  {
+                    console.warn("Error when feching settings (TaskReducer) :"+err)
+                  }
+                  
                 }
               }
               else {
-                let nxt;
-
+              
+                //compenser les deux secondes de vérification
+                el.history[el.history.length - 1].dateFin= el.history[el.history.length - 1].dateFin+2;
 
                 let availableTasks = state.tasks.filter(
                   elem => h.getAvailableTime(elem) > 0
                 );
 
                 if (availableTasks.length == 0) {
-
-                  console.log("fin de la journée");
                   //fin de la journée
+                  //alerter si avec une notification si le paramètre correspons
+                  h.switchTask(null, true);
 
-                  isJourneEnding = true;
-                  setTimeout(event =>{
-                    h.findTodayTask().then(
-                      data =>{
-                        if (data.tasks.length==0)
-                        {
-                          h.findAll("tasks").then(
-                            dt => { 
-                      
-                              h.addTasks([...dt]);
-                          }
-                          );
-                        }
-                        else
-                        {
-                          //????
-                          nextJourneyTask = data.tasks;
-                        }
-                      }
-                    );
-                  },1000);
                 }
                 else {
+                  //passer au tache 
+                  //alerter l'utisilisateur avec une notification
+                  console.log("La tache suivante à lancer est " + availableTasks[0].description);
 
-                  //passer au tache suivante
-                  nxt = availableTasks.find(elem => elem.IdTask == el.next);
-                  if (nxt) {
-
-                    nxt = nxt.IdTask;
-
-                  }
-                  else if (availableTasks.length == 1) {
-                    nxt = availableTasks[0].IdTask;
-                  }
-                  else {
-
-                    let cur = el.IdTask;
-
-
-                    state.tasks.forEach(
-                      element, i => {
-                        if ((element.IdTask == cur) && nxt == undefined) {
-
-
-                          //find fils de l'élémnt courant
-                          let found = state.tasks.find(
-                            e => e.IdTask = element.next
-                          );
-
-                          cur = found.next;
-
-                          if (h.getAvailableTime(found) > 0) {
-                            nxt = found.IdTask;
-                          }
-                        }
-
-                        //dans le cas ou la tache actuel est au milieu les élément d'avant ne son pas analysés
-                        //donc il faut refaire la recher che depuis le début puis que le début est lié au dernier
-                        if ((i + 1) == state.tasks.length && nxt == undefined) {
-                          state.tasks.forEach(
-                            elmnt => {
-                              if ((elmnt.IdTask == cur) && nxt == undefined) {
-
-                                //find fils de l'élémnt courant
-                                let found = state.tasks.find(
-                                  e => e.IdTask = elmnt.next
-                                );
-
-                                cur = found.next;
-
-                                if (h.getAvailableTime(found) > 0) {
-                                  nxt = found.IdTask;
-                                }
-                              }
-                            }
-                          );
-
-                        }
-                      }
-                    );
-
-
-                  }
+                  
+                  h.switchTask(availableTasks[0].IdTask, availableTasks[0].notifyBegining);
                 }
 
-                console.log("La tache suite à lancer est "+ state.tasks.find(
-                  e => e.IdTask == nxt
-                ).description);
 
-                h.switchTask(nxt);
               }
 
 
@@ -170,14 +111,13 @@ function taskUpdate(state = currentTaskState, action) {
   }
 
 
-  if (isJourneEnding)
-  {
+  if (isJourneEnding) {
     return {
       ...state,
       tasks: [...nextJourneyTask]
     };
   }
-  
+
   return nextState;
 }
 

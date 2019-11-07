@@ -5,6 +5,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faStream, faHistory, faTasks, faGripLines, faChartLine } from '@fortawesome/free-solid-svg-icons';
 
+
 import TaskItem from '../modules/TaskItem';
 
 import { Header } from "react-native-elements";
@@ -12,8 +13,6 @@ import { Container, Content } from 'native-base';
 
 import { connect } from 'react-redux';
 
-
-import { } from "react-native-sqlite-storage";
 
 
 var moment = require("moment");
@@ -83,7 +82,7 @@ class Home extends Component {
 
   _openReorder(date)
   {
-    this.props.navigation.navigate("Reorder", {taskDate: date});
+    this.props.navigation.navigate("TaskLists");
   }
   _openHistory(date)
   {
