@@ -9,6 +9,10 @@ import * as Progress from 'react-native-progress';
 
 import { connect } from 'react-redux';
 
+import  * as h  from '../helpers/funcs';
+
+
+
 
 
 
@@ -20,53 +24,95 @@ class TaskItem extends Component {
     this.state = {
     };
 
-
+    this.percentage = h.getPercentage(this.props.task);
+    // console.log(this.props)
 
   }
 
 
-  _calculPoucent()
+  componentDidUpdate()
   {
-    if (this.props.tasks.actif!=null)
-    {
-
-    }
-    else
-    {
-
-    }
+    this.percentage = h.getPercentage(this.props.task);
   }
+
+  _openDetails()
+  {
+    this.props.navigate(this.props.task.IdTask);
+  }
+
+  _launchTask(id)
+  {
+    
+
+  }
+
+  _deleteTask(id)
+  {
+    console.log("delete")
+  }
+
 
   _showActions() {
-    Alert.alert("Details", "Surpriiiise");
+    
+      Alert.alert("Actions", "What do you want to do?", [
+        {text: 'Details', onPress: () => (this._openDetails())},
+        {text: 'Launch', onPress: () => this._swichToPredecessor()},
+        {text: 'Delete', onPress: () =>  this._deleteTask(this.props.task.IdTask)},
+      ],
+      {cancelable: true},
+      );
+    
+    
+    // this.props.navigation(this.props.task.IdTask);
+
+
   }
 
   _swichToPredecessor()
   {
-    console.log("swich");
+    if (this.percentage==1)
+    {
+      Alert.alert("Actions", "You have done this task for today, do you wanna extend it and reduce another task?", [
+        {text: 'Yes', onPress: () => console.log("navigate to extention page")},
+        {text: 'No', onPress: () => console.log("no")},
+        
+      ],
+      {cancelable: true},
+      );
+    }
+    else
+    {
+      Alert.alert("Confirmation", "Launch '"+this.props.task.description+"' Task and stop the current one?", [
+        {text: 'Yes', onPress: () => h.switchTask(this.props.task.IdTask)},
+        {text: 'Cancel', onPress: () => console.log("canceled")},
+      ],
+      {cancelable: true},
+      );
+    }
+    
   }
 
   render() {
     return (
-      <TouchableOpacity style={styles.base} onLongPress={this._showActions}>
+      <TouchableOpacity style={styles.base} onLongPress={() => this._showActions()}>
 
-        <View >
-          <Progress.Circle showsText={true} progress={0.4} size={70} />
+        <View style={{flex: 3}}>
+          <Progress.Circle  animated= {false} showsText={true} progress={this.percentage} size={70} />
         </View>
 
-        <View>
-          <Text> {this.props.task.description} </Text>
-          <View style={styles.timeContainer}>
-            <Text style={styles.time}>{moment(this.props.task.duree).format("hh:mm")}</Text>
-            <Text style={styles.time}>{moment(this.props.task.duree).format("hh:mm")}</Text>
+        <View style={{backGroundColor: 'red', flex: 8, }}>
+          <Text style={{fontSize: 15, flexWrap: 'wrap'}} numberOfLines={2}> {this.props.task.description} </Text>
+          <View style={{...styles.timeContainer,marginTop: 15, justifyContent:"space-around", flexDirection:'row'}}>
+            <Text style={styles.time}>{h.convertSecondsToHour(this.props.task.duree)}</Text>
+            <Text style={styles.time}>{h.convertSecondsToHour(h.getAvailableTime(this.props.task))}</Text>
           </View>
         </View>
 
-        <TouchableOpacity onPress={this._swichToPredecessor} style={styles.commande}>
-          {
-            this.props.task.actif == false ? <FontAwesomeIcon size={20} icon={faPlay} style={{ color: "green" }} /> :
-              <FontAwesomeIcon size={20} icon={faPause} style={{ color: this.props.configuration.theme.l1 }} />
-          }
+        <TouchableOpacity onPress={() => this._swichToPredecessor()} style={{...styles.commande,flex: 1, justifyContent: 'center'}}>
+            {
+              this.percentage ==1? <FontAwesomeIcon size={20} icon={faPlay} style={{ color: "yellow" }} /> : <FontAwesomeIcon size={20} icon={faPlay} style={{ color: "green" }} />
+            }
+              
         </TouchableOpacity>
 
       </TouchableOpacity>
@@ -87,15 +133,13 @@ const styles = StyleSheet.create(
     timeContainer:
     {
       flexDirection: "row",
-      justifyContent: "space-around"
+      justifyContent: "space-between"
     },
 
     time:
     {
-      borderColor : "red",
-      borderRadius: 10,
-      width: 50,
-      height: 50,
+     
+ 
     },
 
     commande:

@@ -16,6 +16,10 @@ import com.jamesisaac.rnbackgroundtask.BackgroundTaskPackage;
 import androidx.multidex.MultiDex;
 
 
+//pour créer un servcie, cette objet est requis
+import android.content.Intent;
+
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -61,6 +65,10 @@ public class MainApplication extends Application implements ReactApplication {
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
 
     BackgroundTaskPackage.useContext(this);//configuration for needed of back ground working
+
+    Intent TaskServiceIntent = new Intent(getApplicationContext(), TaskStateService.class);
+    getApplicationContext().startService(TaskServiceIntent);
+
   }
 
   /**

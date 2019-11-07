@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button, AsyncStorage} from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faStream } from '@fortawesome/free-solid-svg-icons';
+import { faStream, faHistory, faTasks, faGripLines, faChartLine } from '@fortawesome/free-solid-svg-icons';
 
 import TaskItem from '../modules/TaskItem';
 
 import { Header } from "react-native-elements";
+import { Container, Content } from 'native-base';
 
 import { connect } from 'react-redux';
 
@@ -20,118 +21,201 @@ var moment = require("moment");
 import * as Progress from 'react-native-progress';
 
 
+import  * as h  from '../helpers/funcs';
+
+
 
 class Home extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
     };
 
+    // this._showDetails = this._showDetails.bind();
+    this.activeTask;
 
+  }
+
+
+  componentDidMount()
+  {
+    this.props.dataManager.tasks.find(item => item.actif === true);
+  }
+
+  componentDidUpdate()
+  {
     this.activeTask = this.props.dataManager.tasks.find(item => item.actif === true);
-
   }
 
   _optionsShow() {
-    console.log("show options");
+    this.props.navigation.openDrawer();
   }
 
   _SwichDefaulftConfig() {
-    console.log("default config");
+    
+    h.findAll("tasks").then(
+      data => { 
+
+        h.addTasks([...data]);
+    }
+    );
+
+    // this.props.dispatch({type:  "CONFIGURE_DEFAULT"});
+
+
+    
   }
 
   _navigateNouveauRoutine() {
     console.log("nouveau routine");
+
+    // var a =this.test();
+    // console.log(a);
+
   }
 
-  _showActiveDetails()
+  _showDetails(id)
   {
-    if (this.activeTask!=null)
-    {
-      console.log("détails de la tâche active");
-    }
-    else
-    {
-      console.warn("Aucune tache active");
-    }
+    this.props.navigation.navigate("Details",{IdTask: id});
+  }
+
+  _openReorder(date)
+  {
+    this.props.navigation.navigate("Reorder", {taskDate: date});
+  }
+  _openHistory(date)
+  {
+    this.props.navigation.navigate("History", {taskDate: date});
   }
 
 
   render() {
 
     return (
-      <View style={ { backgroundColor: this.props.configuration.theme.l5 , flex: 1}}>
+      // <View style={ { backgroundColor: this.props.configuration.theme.l5 , flex: 1}}>
+
+      <Container>
           <Header
             style={styles.Header}
 
             leftComponent={
-              <TouchableOpacity onPress={(e) => this._optionsShow()}>
-                <FontAwesomeIcon size={30} icon={faStream} style={{ color: this.props.configuration.theme.l4 }} />
+              <TouchableOpacity onPress={(e) => this._optionsShow() }>
+                <FontAwesomeIcon size={30} icon={faGripLines} style={{ color: this.props.configuration.theme.l4 }} />
               </TouchableOpacity>
             }
-            centerComponent={{ text: 'About Today', style: { color: this.props.configuration.theme.l4, fontSize: 25 } }}
+            centerComponent={{ text: 'About Today', style: {color: this.props.configuration.theme.l4, fontSize: 25} }}
             
             backgroundColor={this.props.configuration.theme.l1}
             barStyle="light-content"
             placement="right"
+            containerStyle= {{
+              height:60,
+              paddingBottom: 20
+            }}
           />
 
 
-          {/* Affichage de la tache active */}
-          {
-            
-            this.activeTask != null ?
-              <TouchableOpacity style={styles.activeTask} onPress={this._showActiveDetails}>
-                <Progress.Circle color={["red"]} borderRadius={10} showsText={true} progress={0.8} size={125}  style= {styles.progressCircle}/>
-
-                <View style={styles.timeContainer }>
-                  <Text style= {{fontWeight:'bold', fontSize: 20}}> {this.activeTask.description}   </Text>
-                  <Text style={styles.time}>   {moment(this.activeTask.duree).format("HH:mm")}   </Text>
-                  <Text style={styles.time}>   {moment(this.activeTask.duree).format("HH:mm")}   </Text>
-                  
-                </View>
-              </TouchableOpacity> 
+        
+          
+        
+          <View style={styles.topContent}>
+            {/* Affichage de la tache active */}
+            {
               
-              : 
+              this.activeTask != undefined &&
+                
+                <TouchableOpacity style={styles.activeTask} onPress={(e) => this._showDetails(this.activeTask.IdTask)}>
+                  <Progress.Circle  color={"red"} animated= {false} thickness={6} showsText={true} progress={ h.getPercentage(this.activeTask)} size={125}  style= {styles.progressCircle}/>
 
-              <View>
-              </View>
-
-          }
-
-
-          {
-            this.props.dataManager.tasks.length > 0 ?
-
-                <View style={styles.TaskList}>
-                  <FlatList 
-                  data={this.props.dataManager.tasks.filter((item, index)=> item.actif===false)}
-                  renderItem={({ item }) => <TaskItem task={item} />}
-                  keyExtractor={item => item.IdTask}
-                />
-                </View>
+                  <View style={styles.timeContainer}>
+                    <Text  style= {{fontWeight:'bold', fontSize: 20, justifyContent: "center", flex:4, flexWrap: 'wrap'}} > {this.activeTask.description}   </Text>
+                    
+                    <Text style={{...styles.time, flex: 1.5}}>   {h.convertSecondsToHour(this.activeTask.duree)}   </Text>
+                    <Text style={{...styles.time , flex: 1.5}}>   {h.convertSecondsToHour(h.getAvailableTime(this.activeTask))}   </Text>
+                    
+                  </View>
+                  
+                </TouchableOpacity> 
+                
                 
 
+            }
 
-              :
-              
-              <View >
-                <Text>
-                  Vous avec définit aucune tâche journalière
-                  On vous propose d'usiliser d'usiliser celui qu'on a définit par défaut pour vous!!
-                  </Text>
+            {
+                this.props.dataManager.tasks.length > 0 &&
 
-                <View style={styles.confirmBtn}>
-                  <Button title="ça me va" onPress={(e) => this._SwichDefaulftConfig} />
-                  <Button title="Crérer un nouveau" onPress={(e) => this._navigateNouveauRoutine} />
+                    
+                <View style={styles.tabOptionContainer}>
+                    <TouchableOpacity style= {{
+
+                        color: this.props.configuration.theme.l4, 
+                        borderColor: this.props.configuration.theme.l4
+                      }}
+                      onPress = {(e)=> this._openReorder(this.activeTask.date)}>
+                      
+                      {/* <Text style= {{fontSize:20,fontWeight: "bold",}}>Reorder Tasks</Text> */}
+                      <FontAwesomeIcon icon={faTasks} color={this.props.configuration.theme.l1} size={25}/>
+
+
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style= {{
+                      
+                      borderColor: this.props.configuration.theme.l4,
+                      color: this.props.configuration.theme.l4 } } 
+                      onPress = {(e)=> this._openHistory(this.activeTask.date)}>
+
+                      {/* <Text style= {{fontSize:20, fontWeight: "bold",}}>History</Text>   */}
+                      <FontAwesomeIcon icon={faHistory} color={this.props.configuration.theme.l1} size={25}/>
+
+                    </TouchableOpacity>
                 </View>
+              }
+            </View>
 
 
-              </View>
+            {
+              this.props.dataManager.tasks.length > 0 ?
 
-          }
+                  
 
-      </View>
+
+                    <FlatList 
+                    style= {{marginTop: 15}}
+                    data={this.props.dataManager.tasks.filter((item, index)=> item.actif===false)}
+                    renderItem={({ item }) => <TaskItem task={item} navigate={(id)=>this._showDetails(id)}/>}
+                    keyExtractor={item => item.IdTask}
+                  />
+
+               
+                    
+
+
+                  :
+                  
+                  <View style={{ flex: 1, top: 75 , width: 300, left: 15}}>
+                    <Text style={{ marginBottom: 20}}>
+                      You did not define jouney tasks yet for Today,
+                      We suggest you to use the default Tasks routine!
+                      Have a good Day! 
+                      </Text>
+
+                    <View style={styles.confirmBtn}>
+                      <Button   color = {this.props.configuration.theme.l2} title="It's Ok" onPress={(e) => this._SwichDefaulftConfig()} />
+                      <Button color = {this.props.configuration.theme.l2} title="Create new" onPress={(e) => this._navigateNouveauRoutine()} />
+                    </View>
+
+
+                  </View>
+              
+
+            }
+
+        
+
+        </Container>
 
     );
   }
@@ -148,9 +232,10 @@ const styles = StyleSheet.create(
 
     activeTask:
     {
+      flex: 6,
       alignItems: "center",
       paddingTop: 20,
-      backgroundColor:  "green"
+      // backgroundColor:  "green"
     },
     progressCircle:
     {
@@ -158,9 +243,8 @@ const styles = StyleSheet.create(
     },
     timeContainer:
     {
-      
       flexDirection: "row",
-      justifyContent: "space-around",
+      justifyContent: "space-between",
     },
     time:
     {
@@ -171,13 +255,30 @@ const styles = StyleSheet.create(
     {
 
       paddingTop:10,
-      backgroundColor: "red"
+      // backgroundColor: "red"
 
     },
     confirmBtn:
     {
       flexDirection: "row",
       justifyContent: "space-around",
+    },
+    tabOptionContainer:
+    {
+      top: 28,
+      justifyContent: 'space-between',
+      height: 70,
+      flex: 0.7
+    },
+    tabOption:
+    { 
+      borderWidth: 1, 
+      borderRightWidth: 0,
+      
+    },
+    topContent:
+    {
+      flexDirection: 'row'
     }
   }
 );

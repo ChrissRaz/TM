@@ -1354,11 +1354,6 @@ argparse@^1.0.7:
   dependencies:
     sprintf-js "~1.0.2"
 
-argsarray@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/argsarray/-/argsarray-0.0.1.tgz#6e7207b4ecdb39b0af88303fa5ae22bda8df61cb"
-  integrity sha1-bnIHtOzbObCviDA/pa4ivajfYcs=
-
 arr-diff@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/arr-diff/-/arr-diff-1.1.0.tgz#687c32758163588fef7de7b36fabe495eb1a399a"
@@ -2178,6 +2173,11 @@ decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
   integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+
+dedent@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.6.0.tgz#0e6da8f0ce52838ef5cec5c8f9396b0c1b64a3cb"
+  integrity sha1-Dm2o8M5Sg471zsXI+TlrDBtko8s=
 
 deep-extend@^0.6.0:
   version "0.6.0"
@@ -3281,11 +3281,6 @@ image-size@^0.6.0:
   resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.6.3.tgz#e7e5c65bb534bd7cdcedd6cb5166272a85f75fb2"
   integrity sha512-47xSUiQioGaB96nqtp5/q55m0aBQSQdyIloMOc/x+QVTDZLNmXE892IIDrJ0hM1A5vcNUDD5tDffkSP5lCaIIA==
 
-immediate@^3.2.2:
-  version "3.2.3"
-  resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.2.3.tgz#d140fa8f614659bd6541233097ddaac25cdd991c"
-  integrity sha1-0UD6j2FGWb1lQSMwl92qwlzdmRw=
-
 import-fresh@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-2.0.0.tgz#d81355c15612d386c61f9ddd3922d4304822a546"
@@ -3372,7 +3367,7 @@ inquirer@^6.4.1:
     strip-ansi "^5.1.0"
     through "^2.3.6"
 
-invariant@^2.2.4:
+invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   integrity sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==
@@ -4277,11 +4272,6 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash.map@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/lodash.map/-/lodash.map-4.6.0.tgz#771ec7839e3473d9c4cde28b19394c3562f4f6d3"
-  integrity sha1-dx7Hg540c9nEzeKLGTlMNWL09tM=
-
 lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
@@ -4296,11 +4286,6 @@ lodash.unescape@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
-
-lodash.zipobject@^4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/lodash.zipobject/-/lodash.zipobject-4.1.3.tgz#b399f5aba8ff62a746f6979bf20b214f964dbef8"
-  integrity sha1-s5n1q6j/YqdG9peb8gshT5ZNvvg=
 
 lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0:
   version "4.17.15"
@@ -4329,6 +4314,21 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.3.1, loose-envify@^1.4
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
+
+lottie-ios@^3.1.3:
+  version "3.1.3"
+  resolved "https://registry.yarnpkg.com/lottie-ios/-/lottie-ios-3.1.3.tgz#dfa18a3a7e66e5d4a6665bf0a2392d143d15661a"
+  integrity sha512-FKSx9l5Ekwm1Wt/ncoCwvsq8NAb1nylzMFlxrHixLYNBtO2eCQet+vwQag+74Nc/E9Lp3DKkBUCyBfz+zjtmAw==
+
+lottie-react-native@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-3.2.1.tgz#0b2b13b03a2cda9ece8474b9cf633d0fbe78d82b"
+  integrity sha512-dmOySV+qgFrQszCY+7uOZR0XkgbP2FXgCWJZ2h39GqlxJZRHD2uCmXoT+WxaBGw83Gk/2KfIQ1MQMFL8UqC2bw==
+  dependencies:
+    invariant "^2.2.2"
+    lottie-ios "^3.1.3"
+    prop-types "^15.5.10"
+    react-native-safe-modules "^1.0.0"
 
 lru-cache@^4.0.1:
   version "4.1.5"
@@ -4898,22 +4898,6 @@ node-notifier@^5.2.1, node-notifier@^5.4.2:
     shellwords "^0.1.1"
     which "^1.3.0"
 
-node-pre-gyp@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.11.0.tgz#db1f33215272f692cd38f03238e3e9b47c5dd054"
-  integrity sha512-TwWAOZb0j7e9eGaf9esRx3ZcLaE5tQ2lvYy1pb5IAaG1a2e2Kv5Lms1Y4hpj+ciXJRofIxxlt5haeQ/2ANeE0Q==
-  dependencies:
-    detect-libc "^1.0.2"
-    mkdirp "^0.5.1"
-    needle "^2.2.1"
-    nopt "^4.0.1"
-    npm-packlist "^1.1.6"
-    npmlog "^4.0.2"
-    rc "^1.2.7"
-    rimraf "^2.6.1"
-    semver "^5.3.0"
-    tar "^4"
-
 node-pre-gyp@^0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.12.0.tgz#39ba4bb1439da030295f899e3b520b7785766149"
@@ -4929,11 +4913,6 @@ node-pre-gyp@^0.12.0:
     rimraf "^2.6.1"
     semver "^5.3.0"
     tar "^4"
-
-noop-fn@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/noop-fn/-/noop-fn-1.0.0.tgz#5f33d47f13d2150df93e0cb036699e982f78ffbf"
-  integrity sha1-XzPUfxPSFQ35PgywNmmemC94/78=
 
 nopt@^4.0.1:
   version "4.0.1"
@@ -5583,6 +5562,13 @@ react-native-alarm-notification@^1.3.1:
   resolved "https://registry.yarnpkg.com/react-native-alarm-notification/-/react-native-alarm-notification-1.3.1.tgz#ee4334234f2c91760f464a82254f9012b0f3eeb4"
   integrity sha512-B4XC+xYmT3ledEgru8Jup7zTyqQ97ldCZLQx25kUyXJTsRlL6RM8lca6w0SuPSJw33LoTnlSFvE4PNLhz7EFkw==
 
+react-native-animated-loader@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/react-native-animated-loader/-/react-native-animated-loader-0.0.8.tgz#5475166c2185da641c6a20477fc93819144383e8"
+  integrity sha512-NFdAbMABoS1Gfv4BGYmVKAAK++y1cAPjooJefRAAOVC0ehUGsWpzu+AwvgJPmbTCAJ6xwXGzpDdvP1n/Bw/6ZA==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-background-fetch@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/react-native-background-fetch/-/react-native-background-fetch-2.7.1.tgz#1467aed0fd2851edfdf10d3d9ac4ffd0cf069a85"
@@ -5597,6 +5583,11 @@ react-native-background-task@^0.2.1:
   resolved "https://registry.yarnpkg.com/react-native-background-task/-/react-native-background-task-0.2.1.tgz#9d110ed14b245e0d8b9ec8114ce24b33ddda65de"
   integrity sha512-t5NvHWiqdIRf+KRUbeYH0QYSF3TTTe67g9TuOy/KbfU0KWqK1igLbQB/vw1o8nXZrWWIzSl9mSTG+2V/57TRzw==
 
+react-native-background-timer@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-background-timer/-/react-native-background-timer-2.1.1.tgz#9a2489681ab2f8033c213c73272e9d4c47572cd5"
+  integrity sha512-cuXIIv+dcG8a8qkTD8pMzeqOEZCO+UGKglZWIe1osve+yJslmCowYQff+bI9xa7NOt2w+Vtd4L3d9JonlSqODg==
+
 react-native-calendar-picker@^6.0.1:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/react-native-calendar-picker/-/react-native-calendar-picker-6.0.2.tgz#7f7a0b1cfda2a994eacad6d9c34f5adcc237ec88"
@@ -5604,6 +5595,11 @@ react-native-calendar-picker@^6.0.1:
   dependencies:
     prop-types "^15.6.0"
     uuid "3.2.1"
+
+react-native-draggable-flatlist@^1.1.9:
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-1.1.9.tgz#b8f58122f639841c83aa1d913b2e3e9f9507bfe5"
+  integrity sha512-Hga/kEFc+Undx2Y1FzkozWHRWvRz7dJobl5Kg1+xmd9JABS8YIYZWKboSAPmiTHD3FrlVJGIw/mlK5JZP0rJfw==
 
 react-native-drawer@2.5.1:
   version "2.5.1"
@@ -5633,11 +5629,6 @@ react-native-elements@^1.2.6:
     prop-types "^15.7.2"
     react-native-ratings "^6.3.0"
     react-native-status-bar-height "^2.2.0"
-
-react-native-fbsdk@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-1.0.4.tgz#ecc0faf235e12de4423af9908f56b999cf144422"
-  integrity sha512-s0fBRDi/k6jfWFRnmwQwJA4WTriKhyes71tYO6LdXF6nAI7k+7DCdFZqIA7PqtTUA7WwEjSP6qjKTibCDWOwLw==
 
 react-native-fontawesome@^7.0.0:
   version "7.0.0"
@@ -5702,6 +5693,13 @@ react-native-safe-area-view@^0.14.1:
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
+react-native-safe-modules@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-safe-modules/-/react-native-safe-modules-1.0.0.tgz#10a918adf97da920adb1e33e0c852b1e80123b65"
+  integrity sha512-ShT8duWBT30W4OFcltZl+UvpPDikZFURvLDQqAsrvbyy6HzWPGJDCpdqM+6GqzPPs4DPEW31YfMNmdJcZ6zI2w==
+  dependencies:
+    dedent "^0.6.0"
+
 "react-native-screens@^1.0.0 || ^1.0.0-alpha":
   version "1.0.0-alpha.23"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.23.tgz#25d7ea4d11bda4fcde2d1da7ae50271c6aa636e0"
@@ -5715,15 +5713,6 @@ react-native-screens@^2.0.0-alpha.5:
   integrity sha512-5m59glvDDzQvzdBymIn6GfCnzk/9kaxkREEKLVMdANtZlqIuH3Jbgoc+56pcX5LVSZCMaSozPAQBcLaMWO2JUA==
   dependencies:
     debounce "^1.2.0"
-
-react-native-sqlite-2@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-sqlite-2/-/react-native-sqlite-2-3.0.1.tgz#22071031dea394605518e24e0ca84c139dcfbbca"
-  integrity sha512-Uk25M/plj03R946CQD9/2RBIzF2avNz9tPvqx5UozigfTgoM+c/4BCPqahRa3A54539BE4IlMbdJuQjG9qt2nA==
-  dependencies:
-    lodash.map "^4.6.0"
-    lodash.zipobject "^4.1.3"
-    websql "^1.0.0"
 
 react-native-sqlite-storage@^4.1.0:
   version "4.1.0"
@@ -5742,11 +5731,6 @@ react-native-svg@^9.13.2:
   dependencies:
     css-select "^2.0.2"
     css-tree "^1.0.0-alpha.37"
-
-react-native-update-gradle@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-native-update-gradle/-/react-native-update-gradle-1.2.0.tgz#b05f9f0ac0ad41bd9a7c89f828338968c02c1718"
-  integrity sha512-fCpIwfrAb0QQpgnp/9kpZMDJqnQHlEV6BNg3AxLf+Ho/sTqa+3x5KuGiPOubIGilQAZu+9gIXETdg9D++xN62w==
 
 react-native-vector-icons@^6.6.0:
   version "6.6.0"
@@ -6473,15 +6457,6 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-sqlite3@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/sqlite3/-/sqlite3-4.1.0.tgz#e051fb9c133be15726322a69e2e37ec560368380"
-  integrity sha512-RvqoKxq+8pDHsJo7aXxsFR18i+dU2Wp5o12qAJOV5LNcDt+fgJsc2QKKg3sIRfXrN9ZjzY1T7SNe/DFVqAXjaw==
-  dependencies:
-    nan "^2.12.1"
-    node-pre-gyp "^0.11.0"
-    request "^2.87.0"
-
 sshpk@^1.7.0:
   version "1.16.1"
   resolved "https://registry.yarnpkg.com/sshpk/-/sshpk-1.16.1.tgz#fb661c0bef29b39db40769ee39fa70093d6f6877"
@@ -6742,11 +6717,6 @@ time-stamp@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/time-stamp/-/time-stamp-1.1.0.tgz#764a5a11af50561921b133f3b44e618687e0f5c3"
   integrity sha1-dkpaEa9QVhkhsTPztE5hhofg9cM=
-
-tiny-queue@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/tiny-queue/-/tiny-queue-0.2.1.tgz#25a67f2c6e253b2ca941977b5ef7442ef97a6046"
-  integrity sha1-JaZ/LG4lOyypQZd7XvdELvl6YEY=
 
 tmp@^0.0.33:
   version "0.0.33"
@@ -7048,17 +7018,6 @@ webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
   integrity sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==
-
-websql@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/websql/-/websql-1.0.0.tgz#1bd00b27392893134715d5dd6941fd89e730bab5"
-  integrity sha512-7iZ+u28Ljw5hCnMiq0BCOeSYf0vCFQe/ORY0HgscTiKjQed8WqugpBUggJ2NTnB9fahn1kEnPRX2jf8Px5PhJw==
-  dependencies:
-    argsarray "^0.0.1"
-    immediate "^3.2.2"
-    noop-fn "^1.0.0"
-    sqlite3 "^4.0.0"
-    tiny-queue "^0.2.1"
 
 whatwg-encoding@^1.0.1, whatwg-encoding@^1.0.3:
   version "1.0.5"
