@@ -9,6 +9,8 @@ const currentTaskState = {
 };
 
 
+let canswitch = false;
+
 
 
 function taskUpdate(state = currentTaskState, action) {
@@ -30,6 +32,7 @@ function taskUpdate(state = currentTaskState, action) {
               let avTime = h.getAvailableTime(el);
 
               if (avTime > 2) {
+                canswitch=true;
                 // console.log(avTime);
                 el.history[el.history.length - 1].dateFin = Math.floor(Date.now() / 1000);
                 h.updateTask(el);
@@ -56,30 +59,36 @@ function taskUpdate(state = currentTaskState, action) {
                 }
               }
               else {
+
+                  if (canswitch)
+                  {
+                      canswitch=false;
+                      //compenser les deux secondes de vérification
+                      el.history[el.history.length - 1].dateFin= el.history[el.history.length - 1].dateFin+2;
+
+                      let availableTasks = state.tasks.filter(
+                        elem => h.getAvailableTime(elem) > 0
+                      );
+
+                      availableTasks.sort((a, b) => a.order - b.order);
+
+
+                      if (availableTasks.length == 0) {
+                        //fin de la journée
+                        //alerter si avec une notification si le paramètre correspons
+                        h.switchTask(null, true);
+
+                      }
+                      else {
+                        //passer au tache 
+                        //alerter l'utisilisateur avec une notification
+
+                        console.log("La tache suivante à lancer est " + availableTasks[0].description);
+                        
+                        h.switchTask(availableTasks[0].IdTask, availableTasks[0].notifyBegining);
+                      }
+                  }
               
-                //compenser les deux secondes de vérification
-                el.history[el.history.length - 1].dateFin= el.history[el.history.length - 1].dateFin+2;
-
-                let availableTasks = state.tasks.filter(
-                  elem => h.getAvailableTime(elem) > 0
-                );
-
-                if (availableTasks.length == 0) {
-                  //fin de la journée
-                  //alerter si avec une notification si le paramètre correspons
-                  h.switchTask(null, true);
-
-                }
-                else {
-                  //passer au tache 
-                  //alerter l'utisilisateur avec une notification
-                  console.log("La tache suivante à lancer est " + availableTasks[0].description);
-
-                  
-                  h.switchTask(availableTasks[0].IdTask, availableTasks[0].notifyBegining);
-                }
-
-
               }
 
 
@@ -110,13 +119,6 @@ function taskUpdate(state = currentTaskState, action) {
       break;
   }
 
-
-  if (isJourneEnding) {
-    return {
-      ...state,
-      tasks: [...nextJourneyTask]
-    };
-  }
 
   return nextState;
 }

@@ -86,9 +86,11 @@ export const findTodayTask = async () => {
 
 
             let filtred = value.tasks.filter(
-                el => el.date == formatDate(new Date())
+                elem => elem.date == formatDate(new Date())
 
             );
+
+            
 
 
             if (filtred.length > 0) {
@@ -114,7 +116,7 @@ export const findTodayTask = async () => {
                 }
 
             
-                //evaluating losted time when the app was innactive and verify if the task was stated before
+                //evaluating losted time when the app was innactive 
                 let lastWorkedTask = filtred.find(el => el.actif == true);
 
                 let lastWorkingTime = lastWorkedTask.history[lastWorkedTask.history.length - 1].dateFin;
@@ -125,20 +127,24 @@ export const findTodayTask = async () => {
                 let lastHistoryAsigned = lastWorkingTime;
 
                 filtred = filtred.map (
-                    el => {
+                    (el,i,before) => {
                         let TimeElapsedOff = Math.floor((Date.now() / 1000) - lastWorkingTime);
 
 
                         if (assignedElapsedTime < TimeElapsedOff) {
 
-                            if (el.duree <= (TimeElapsedOff - assignedElapsedTime)) {
-                                assignedElapsedTime += el.duree;
-                                var nexBegnignHistory = lastHistoryAsigned + el.duree;
+                            let elemenAvailableTime = getAvailableTime(el);
+
+                            if ( elemenAvailableTime <= (TimeElapsedOff - assignedElapsedTime)) {
+                                assignedElapsedTime += elemenAvailableTime;
+                                var nexBegnignHistory = lastHistoryAsigned + elemenAvailableTime;
 
                                 el.history.push({ dateDebut: lastHistoryAsigned, dateFin: nexBegnignHistory, off: true });
 
                                 lastHistoryAsigned = nexBegnignHistory;
 
+                                el.actif = (TimeElapsedOff==assignedElapsedTime);
+                                
                             }
                             else {
                                 var nw = Math.floor(Date.now() / 1000);
@@ -146,6 +152,11 @@ export const findTodayTask = async () => {
                                 assignedElapsedTime += nw - lastHistoryAsigned;
 
                                 el.history.push({ dateDebut: lastHistoryAsigned, dateFin: nw, off: true });
+
+                                if (TimeElapsedOff==assignedElapsedTime)
+                                {
+                                    el.actif = !(before.find(e=> e.actif==true)==undefined);
+                                }
 
                             }
 
@@ -515,7 +526,7 @@ export const switchTask = async (IdT, alert = false) => {
                 if (alert)
                 {
                    let settings = await findAll("settings");
-                   settings = JSON.parse(settings);
+                   
                    id (settings.notify && settings.notifyBegining)
                    {
                        //Lancer une notification  que la tâche viens de commencer

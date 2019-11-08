@@ -51,16 +51,7 @@ const TaskNav = createStackNavigator({
   }
 });
 
-const GlobalTaskNav = createStackNavigator({
-  List: {
-    screen: GlobalTasksList,
-  },
-  addTask: {
-    screen: AddTask
-  },
-});
-
-
+//
 const BaseNav = createDrawerNavigator({
   Home: {
     screen: TaskNav,
@@ -70,6 +61,12 @@ const BaseNav = createDrawerNavigator({
     screen: GlobalTasksList,
     navigationOptions: {
       drawerLabel: 'Programs'
+    },
+  },
+  NewTask: {
+    screen: AddTask,
+    navigationOptions: {
+      drawerLabel: 'New Tasks'
     },
   },
   

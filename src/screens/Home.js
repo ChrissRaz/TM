@@ -68,11 +68,7 @@ class Home extends Component {
   }
 
   _navigateNouveauRoutine() {
-    console.log("nouveau routine");
-
-    // var a =this.test();
-    // console.log(a);
-
+    this.props.navigation.navigate("NewTask");
   }
 
   _showDetails(id)

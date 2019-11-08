@@ -31,6 +31,7 @@ class TaskItemSecondary extends Component {
         }}
         onLongPress={this.props.stt.move}
         onPressOut={this.props.stt.moveEnd}
+        onPress = {() => this.props.showDetails(this.props.stt.IdTask)}
       >
         <FontAwesomeIcon color={ this.props.stt.isActive ? this.props.configuration.theme.l1  : this.props.configuration.theme.l2
         } style={{ flex: 2}} size={21} icon={faFlag} />
