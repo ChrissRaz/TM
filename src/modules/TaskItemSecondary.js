@@ -22,7 +22,7 @@ class TaskItemSecondary extends Component {
         <TouchableOpacity
         style={{ 
           justifyContent: 'center',
-          marginBottom: 7,
+          marginBottom: 15,
           flexDirection: "row",
           justifyContent: "space-around",
           flex: 1,
@@ -34,20 +34,20 @@ class TaskItemSecondary extends Component {
         onPress = {() => this.props.showDetails(this.props.stt.IdTask)}
       >
         <FontAwesomeIcon color={ this.props.stt.isActive ? this.props.configuration.theme.l1  : this.props.configuration.theme.l2
-        } style={{ flex: 2}} size={21} icon={faFlag} />
+        } style={{ flex: 2}} size={18} icon={faFlag} />
 
         <Text style={{ 
           fontWeight: 'bold', 
           color: 'white',
-          fontSize: 21,
+          fontSize: 18,
           flex: 7,
           flexWrap: "wrap",
           marginLeft: 7,
           color: this.props.stt.isActive ? this.props.configuration.theme.l1  : this.props.configuration.theme.l2,
         }}>{this.props.stt.item.description} </Text>
 
-        <Text style= {{fontSize: 17, flex: 2, borderWidth: 2, borderBottomColor: this.props.stt.isActive ? this.props.configuration.theme.l1  : this.props.configuration.theme.l2,
-        borderRadius: 17 , textAlign:'center', marginRight: 5}}>
+        <Text style= {{fontSize: 15, flex: 2, borderWidth: 2, borderBottomColor: this.props.stt.isActive ? this.props.configuration.theme.l1  : this.props.configuration.theme.l2,
+        borderRadius: 25 , textAlign:'center', marginRight: 5}}>
             {h.convertSecondsToHour( this.props.stt.item.duree) }
         </Text>
 

@@ -1,3 +1,8 @@
+import { AsyncStorage } from "react-native";
+import * as h from '../../helpers/funcs';
+// import  * as d  from '../../helpers/defaultConfigs';
+
+
 const Themes = {
     default: 
     {
@@ -17,12 +22,45 @@ const Themes = {
     }
 };
 
-const initialTheme = {
+
+let initialConfig = {
     theme: Themes.default,
+    DarkMode:false,
+    notify: true,
+    notifyBegining: true,
+    notifyBeforeEnding: true,
+    notifyJourneyBegining: false,
+    autoSwitchToDefautlTaskAtEndOfJourney: true,
+    notifyBeforeEndingDuration: 5,
+    lastIndexTask: 0,
 };
 
 
-function  configure(state=initialTheme, action) 
+// h.findAll("settings").then(
+//     date => {
+
+//         console.log("loading configs");
+
+//         initialConfig = {
+//             ...initialConfig,
+//             ...data,
+//             theme:data.DarkMode? Themes.dark:Themes.default
+//         }
+//         // initialConfig.theme=data.DarkMode? Themes.dark:Themes.default;
+//         // initialConfig.DarkMode=data.DarkMode;
+//         // initialConfig.notify= data.notify;
+//         // initialConfig.notifyBegining = data.notifyBegining;
+//         // initialConfig.notifyBeforeEnding= data.notifyBeforeEnding;
+//         // initialConfig.notifyJourneyBegining= data.notifyJourneyBegining;
+//         // initialConfig.autoSwitchToDefautlTaskAtEndOfJourney = data.autoSwitchToDefautlTaskAtEndOfJourney;
+//         // initialConfig.notifyBeforeEndingDuration = data.notifyBeforeEndingDuration;
+//         // initialConfig.lastIndexTask = data.lastIndexTask;
+//     }
+// );
+
+console.log(initialConfig);
+
+function  configure(state=initialConfig, action) 
 {
     let nextState;
 
@@ -30,20 +68,53 @@ function  configure(state=initialTheme, action)
         case "DEFAULT_THEME":
             nextState = {
                 ...state,
-                theme: Themes.default
-            }
+                theme: Themes.default,
+                DarkMode: false
+            };
+
+            h.add("settings",nextState).catch(err => console.warn("Error when updatings settings: "+err)).then(
+                dt =>
+                AsyncStorage.getItem("settings").then(
+                    d => console.log(JSON.parse(d))
+                )
+            );
             break;
         
         case "DARK_THEME":
                 nextState = {
                     ...state,
-                    theme: Themes.dark
-                }
+                    theme: Themes.dark,
+                    DarkMode: true
+                };
+            
+
+                h.add("settings",nextState).catch(err => console.warn("Error when updatings settings: "+err)).then(
+                    dt =>
+                    AsyncStorage.getItem("settings").then(
+                        d => console.log(JSON.parse(d))
+                    )
+                );
+
+                
                 break;
+
+        case "UPDATE_SETTINGS":
+            //value must be the settings with modification
+
+                nextState ={
+                    ...state,
+                    ...action.value
+                };
+
+                h.add("settings",nextState).catch(err => console.warn("Error when updatings settings: "+err));
+
+            break;
     
         default:
             nextState = state;
             break;
+
+        
     }
 
     return nextState;

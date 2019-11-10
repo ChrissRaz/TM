@@ -6,7 +6,6 @@ import Home from '../screens/Home';
 import AddTask from '../screens/AddTask';
 import TaskDetails from '../screens/TaskDetails';
 import TaskHistory from '../screens/TaskHistory';
-import GlobalHistory from '../screens/GlobalHistory';
 import GlobalTasksList from '../screens/GlobalTasksList';
 import TaskReorder from '../screens/TaskReorder';
 
@@ -16,6 +15,7 @@ import CustomDraw from '../modules/CustomDraw';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faStream, faHome } from '@fortawesome/free-solid-svg-icons';
+
 
 
 

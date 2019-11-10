@@ -51,84 +51,91 @@ class Splash extends Component {
   }
   componentDidUpdate()
   {
-
+      
   }
 
   componentDidMount() {
 
-    //Upadte the courrent active task
+    h.findAll("settings").then(
+      dataSettings => {
+          console.log("loading configs...");
+          console.log(dataSettings);
+          console.log("hello");
+          this.props.dispatch({type: "UPDATE_SETTINGS", value: dataSettings});
+          console.log("bye2")
+          //Upadte the courrent active task
 
-    let endTime = new Date();
-    endTime.setHours(23,59,59);
-    
-    //service to survey Tasks progress
-    BackgroundTimer.runBackgroundTimer(
-      ()=> {
-        let act = new Date();
-      if (act == endTime)
-      {
-        console.log("changer");
-      }
+          let endTime = new Date();
+          endTime.setHours(23,59,59);
+          
+          //service to survey Tasks progress
+          BackgroundTimer.runBackgroundTimer(
+            ()=> {
+              let act = new Date();
+            if (act == endTime)
+            {
+              console.log("changer");
+            }
 
-      this.props.dispatch({type:  "UPDATE_ACTIF"})},  
-      1000
+            this.props.dispatch({type:  "UPDATE_ACTIF"})},  
+            1000
+          );
+
+          this.checkInterval = setInterval((e)=>
+          {
+            //Checking configs and datas
+            if (this.settingsConfirm && this.tasksConfirm && this.UTasksConfirm)
+            {
+              //checking TodayTask
+              h.findTodayTask().then(
+                data => {
+                  console.log("loading Todays Tasks");
+                  this.props.dispatch({type: "CONFIGURE_TODAY_TASK", value: data.tasks});
+                  
+                  this.props.navigation.navigate("Base");
+                }
+              );
+              
+            }
+            },1000);
+
+
+          //setting up persist datas
+          AsyncStorage.multiGet(["settings","tasks", "userTasks"]).then((val =>{ 
+
+            val.map((result, i, store) => {
+              let key = store[i][0];
+              let value = store[i][1];
+
+              if (key=="settings" && value==null)
+              {
+                  AsyncStorage.setItem("settings",JSON.stringify(d.Defaultconfigs)).then(
+                    val=> this.settingsConfirm= true
+                  ).catch(err => this._errorOccured(err));
+              }
+              else if (key=="tasks" && value==null)
+              {
+                AsyncStorage.setItem("tasks",JSON.stringify(d.defaultTasks)).then(
+                  val => this.tasksConfirm = true
+                ).catch(err => this._errorOccured(err));
+              }
+              else if (key=="userTasks" && value==null)
+              {
+                AsyncStorage.setItem("userTasks",JSON.stringify(d.defaultUserTasks)).then(
+                  val => this.UTasksConfirm = true
+                ).catch(err => this._errorOccured(err));
+              }
+              else
+              {
+                this.settingsConfirm = true;
+                this.tasksConfirm = true;
+                this.UTasksConfirm = true;
+              }
+            });
+
+          })).catch(err => this._errorOccured(err));
+            }
     );
-
-    this.checkInterval = setInterval((e)=>
-    {
-      //Checking configs and datas
-      if (this.settingsConfirm && this.tasksConfirm && this.UTasksConfirm)
-      {
-        //checking TodayTask
-        h.findTodayTask().then(
-          data => {
-            this.props.dispatch({type: "CONFIGURE_TODAY_TASK", value: data.tasks});
-            this.props.navigation.navigate("Base");
-          }
-        );
-        
-      }
-      },1000);
-
-      
-    
-
-
-    //setting up persist datas
-    AsyncStorage.multiGet(["settings","tasks", "userTasks"]).then((val =>{ 
-
-      val.map((result, i, store) => {
-        let key = store[i][0];
-        let value = store[i][1];
-
-        if (key=="settings" && value==null)
-        {
-            AsyncStorage.setItem("settings",JSON.stringify(d.Defaultconfigs)).then(
-              val=> this.settingsConfirm= true
-            ).catch(err => this._errorOccured(err));
-        }
-        else if (key=="tasks" && value==null)
-        {
-          AsyncStorage.setItem("tasks",JSON.stringify(d.defaultTasks)).then(
-            val => this.tasksConfirm = true
-          ).catch(err => this._errorOccured(err));
-        }
-        else if (key=="userTasks" && value==null)
-        {
-          AsyncStorage.setItem("userTasks",JSON.stringify(d.defaultUserTasks)).then(
-            val => this.UTasksConfirm = true
-          ).catch(err => this._errorOccured(err));
-        }
-        else
-        {
-          this.settingsConfirm = true;
-          this.tasksConfirm = true;
-          this.UTasksConfirm = true;
-        }
-      });
-
-    })).catch(err => this._errorOccured(err));
-
 
   }
 

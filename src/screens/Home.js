@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Button, AsyncStorage} from 'r
 import { FlatList } from 'react-native-gesture-handler';
 
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faStream, faHistory, faTasks, faGripLines, faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faStream, faHistory, faTasks, faBars } from '@fortawesome/free-solid-svg-icons';
 
 
 import TaskItem from '../modules/TaskItem';
@@ -97,7 +97,7 @@ class Home extends Component {
 
             leftComponent={
               <TouchableOpacity onPress={(e) => this._optionsShow() }>
-                <FontAwesomeIcon size={30} icon={faGripLines} style={{ color: this.props.configuration.theme.l4 }} />
+                <FontAwesomeIcon size={30} icon={faBars} style={{ color: this.props.configuration.theme.l4 }} />
               </TouchableOpacity>
             }
             centerComponent={{ text: 'About Today', style: {color: this.props.configuration.theme.l4, fontSize: 25} }}
@@ -172,45 +172,36 @@ class Home extends Component {
 
 
             {
-              this.props.dataManager.tasks.length > 0 ?
+              this.props.dataManager.tasks.length > 0 ?       
 
-                  
+              <FlatList 
+              style= {{marginTop: 15}}
+              data={this.props.dataManager.tasks.filter((item, index)=> item.actif===false)}
+              renderItem={({ item }) => <TaskItem task={item} navigate={(id)=>this._showDetails(id)}/>}
+              keyExtractor={item => item.IdTask}
+            />
 
+            :
+            
+            <View style={{ flex: 1, top: 75 , width: 300, left: 15}}>
+                <Text style={{ marginBottom: 20}}>
+                  You did not define jouney tasks yet for Today,
+                  We suggest you to use the default Tasks routine!
+                  Have a good Day! 
+                  </Text>
 
-                    <FlatList 
-                    style= {{marginTop: 15}}
-                    data={this.props.dataManager.tasks.filter((item, index)=> item.actif===false)}
-                    renderItem={({ item }) => <TaskItem task={item} navigate={(id)=>this._showDetails(id)}/>}
-                    keyExtractor={item => item.IdTask}
-                  />
-
-               
-                    
-
-
-                  :
-                  
-                  <View style={{ flex: 1, top: 75 , width: 300, left: 15}}>
-                    <Text style={{ marginBottom: 20}}>
-                      You did not define jouney tasks yet for Today,
-                      We suggest you to use the default Tasks routine!
-                      Have a good Day! 
-                      </Text>
-
-                    <View style={styles.confirmBtn}>
-                      <Button   color = {this.props.configuration.theme.l2} title="It's Ok" onPress={(e) => this._SwichDefaulftConfig()} />
-                      <Button color = {this.props.configuration.theme.l2} title="Create new" onPress={(e) => this._navigateNouveauRoutine()} />
-                    </View>
-
-
-                  </View>
+                <View style={styles.confirmBtn}>
+                  <Button   color = {this.props.configuration.theme.l2} title="It's Ok" onPress={(e) => this._SwichDefaulftConfig()} />
+                  <Button color = {this.props.configuration.theme.l2} title="Create new" onPress={(e) => this._navigateNouveauRoutine()} />
+                </View>
+            </View>
               
 
-            }
+          }
 
-        
 
-        </Container>
+      </Container>
+
 
     );
   }

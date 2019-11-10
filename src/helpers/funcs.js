@@ -44,6 +44,10 @@ export function formatDate(date: Date, delim = "-") {
     return (date.getDate()) + delim + (+date.getMonth() + 1) + delim + date.getFullYear();
 }
 
+export function formatDateToDailyHour(date: Date, delim = ":") {
+
+    return (date.getHours().toString().padStart(2,'0') + delim +date.getMinutes().toString().padStart(2,'0')  + delim + date.getSeconds().toString().padStart(2,'0'));
+}
 
 //id generator  function
 export const init_id_gen = (id = 0) => () => id++;
@@ -90,7 +94,6 @@ export const findTodayTask = async () => {
 
             );
 
-            
 
 
             if (filtred.length > 0) {
@@ -527,7 +530,7 @@ export const switchTask = async (IdT, alert = false) => {
                 {
                    let settings = await findAll("settings");
                    
-                   id (settings.notify && settings.notifyBegining)
+                   if (settings.notify && settings.notifyBegining)
                    {
                        //Lancer une notification  que la tâche viens de commencer
                    }
@@ -547,102 +550,3 @@ export const switchTask = async (IdT, alert = false) => {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-// if (availableTasks.length == 0) {
-
-                //   console.log("fin de la journée");
-                //   //fin de la journée
-
-                //   isJourneEnding = true;
-                //   setTimeout(event =>{
-                //     h.findTodayTask().then(
-                //       data =>{
-                //         if (data.tasks.length==0)
-                //         {
-                //           h.findAll("tasks").then(
-                //             dt => { 
-
-                //               h.addTasks([...dt]);
-                //           }
-                //           );
-                //         }
-                //         else
-                //         {
-                //           //????
-                //           nextJourneyTask = data.tasks;
-                //         }
-                //       }
-                //     );
-                //   },1000);
-                // }
-                // else {
-
-                //   //passer au tache suivante
-                //   nxt = availableTasks.find(elem => elem.IdTask == el.next);
-                //   if (nxt) {
-
-                //     nxt = nxt.IdTask;
-
-                //   }
-                //   else if (availableTasks.length == 1) {
-                //     nxt = availableTasks[0].IdTask;
-                //   }
-                //   else {
-
-                //     let cur = el.IdTask;
-
-
-                //     state.tasks.forEach(
-                //       element, i => {
-                //         if ((element.IdTask == cur) && nxt == undefined) {
-
-
-                //           //find fils de l'élémnt courant
-                //           let found = state.tasks.find(
-                //             e => e.IdTask = element.next
-                //           );
-
-                //           cur = found.next;
-
-                //           if (h.getAvailableTime(found) > 0) {
-                //             nxt = found.IdTask;
-                //           }
-                //         }
-
-                //         //dans le cas ou la tache actuel est au milieu les élément d'avant ne son pas analysés
-                //         //donc il faut refaire la recher che depuis le début puis que le début est lié au dernier
-                //         if ((i + 1) == state.tasks.length && nxt == undefined) {
-                //           state.tasks.forEach(
-                //             elmnt => {
-                //               if ((elmnt.IdTask == cur) && nxt == undefined) {
-
-                //                 //find fils de l'élémnt courant
-                //                 let found = state.tasks.find(
-                //                   e => e.IdTask = elmnt.next
-                //                 );
-
-                //                 cur = found.next;
-
-                //                 if (h.getAvailableTime(found) > 0) {
-                //                   nxt = found.IdTask;
-                //                 }
-                //               }
-                //             }
-                //           );
-
-                //         }
-                //       }
-                //     );
-
-
-                //   }
-                // }

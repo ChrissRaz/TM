@@ -36,7 +36,6 @@ class GlobalTasksList extends Component {
         loadingTask: false,
       })
     );
-
     this.findedAllTasks=[];
 
     // this.renderItem = this.renderItem.bind(this);
@@ -95,8 +94,7 @@ class GlobalTasksList extends Component {
   }
 
   moveEnd(data)
-  { 
-    console.warn("reorganisation start");
+  {
 
     console.log(data);
     data = data.map(
@@ -109,7 +107,6 @@ class GlobalTasksList extends Component {
         return el;
       }
     );
-    console.warn("reorganisation end");
     console.log(data);
 
     this.updateTask(data).then(
@@ -158,6 +155,8 @@ class GlobalTasksList extends Component {
       }
     );
   }
+
+  
 
   showDetails(id)
   {
@@ -208,9 +207,9 @@ class GlobalTasksList extends Component {
             {
               (this.state.tasks.length==0 && !this.state.loadingTask) && 
 
-              <View>
+              <View style={{alignItems:'center'}}>
                   <Text>No tasks found for {h.formatDate(this.state.dateTask) }</Text>
-                  <Button title= "Add" color= {this.props.configuration.theme.l1} onPress={(e)=>this.props.navigation.navigate("NewTask", {date: this.state.dateTask})}></Button>
+                  <Button style={{top: 20}} title= "Add" color= {this.props.configuration.theme.l1} onPress={(e)=>this.props.navigation.navigate("NewTask", {date: this.state.dateTask})}></Button>
               </View>
             }
           
@@ -250,15 +249,11 @@ class GlobalTasksList extends Component {
       
       {
         this.state.tasks.length> 0 && 
-      <TouchableOpacity style={{ 
-              position: 'absolute',
-              zIndex: 100,
-              right: 10,
-              bottom: 10
 
-            }}>
-            <FontAwesomeIcon size={60} icon={faPlusCircle} style={{ color: this.props.configuration.theme.l1 }} />
-      </TouchableOpacity>
+
+      <TouchableOpacity style={{zIndex: 1000,alignItems: 'center', justifyContent:'center',backgroundColor: this.props.configuration.theme.l1, width: 60, height: 60, borderRadius: 30, position: 'absolute', right: 15, bottom: 15}}>
+       <Text style={{color: this.props.configuration.theme.l4, elevation: 8, fontSize: 25}}>+</Text>
+      </TouchableOpacity> 
     }
 
   </Container>
