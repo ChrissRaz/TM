@@ -17,6 +17,10 @@ import TaskItemSecondary from './../modules/TaskItemSecondary';
 import AnimatedLoader from "react-native-animated-loader";
 
 
+import { NavigationEvents  } from 'react-navigation';
+import now from 'performance-now';
+
+
 
 class GlobalTasksList extends Component {
   
@@ -27,6 +31,7 @@ class GlobalTasksList extends Component {
       dateTask: new Date(),
       tasks: [],
       loadingTask: true,
+
     };
 
     this.findTask(h.formatDate(this.state.dateTask) ).then(
@@ -36,21 +41,39 @@ class GlobalTasksList extends Component {
         loadingTask: false,
       })
     );
+
     this.findedAllTasks=[];
 
     // this.renderItem = this.renderItem.bind(this);
 
   }
 
-  componentDidUpdate()
+  _navigationUpdate(payload)
   {
-    // this.findTask(h.formatDate(this.state.dateTask) ).then(
-    //   data => this.setState({
-    //     ...this.state,
-    //     tasks: data,
-    //     loadingTask: false,
-    //   })
-    // );
+
+    console.log(payload.action.params);
+
+    let date = this.state.dateTask;
+
+    if (now)
+    {
+      date = new Date();
+    }
+    
+  
+    this.findTask(h.formatDate(date)).then(
+      data => this.setState({
+        ...this.state,
+        tasks: data,
+        loadingTask: false,
+        dateTask: date
+      })
+    );
+
+    this.setState({
+      ...this.state,
+      loadingTask: true,
+    });
   }
 
 
@@ -75,6 +98,7 @@ class GlobalTasksList extends Component {
     return res;
   }
 
+
   updateTask = async (data) =>
   {
     let toUpload = this.findedAllTasks.filter(
@@ -92,6 +116,7 @@ class GlobalTasksList extends Component {
     console.log("eeeeeeh", res);
     return res;
   }
+
 
   moveEnd(data)
   {
@@ -156,7 +181,6 @@ class GlobalTasksList extends Component {
     );
   }
 
-  
 
   showDetails(id)
   {
@@ -166,97 +190,103 @@ class GlobalTasksList extends Component {
 
   render() {
     return (
-      <Container style={{backgroundColor: this.props.configuration.theme.l5 }}>
-      <Header
-            style={styles.Header}
-
-            leftComponent={
-              <TouchableOpacity onPress={(e) => this.props.navigation.navigate("Home") }>
-                <FontAwesomeIcon size={30} icon={faHome} style={{ color: this.props.configuration.theme.l4 }} />
-              </TouchableOpacity>
-            }
-            centerComponent={{ text: 'Tasks Program', style: {color: this.props.configuration.theme.l4, fontSize: 25} }}
-            
-            backgroundColor={this.props.configuration.theme.l1}
-            barStyle="light-content"
-            placement="right"
-            containerStyle= {{
-              height:60,
-              paddingBottom: 20
-            }}
-          />
-
-      <Content style={{flex: 1}}>
-       
-          < CalendarPicker
-            style= {{flex: 2}}
-            onDateChange={(date) => this._onDateChange(date) }
-            selectedDayColor={this.props.configuration.theme.l3}
-            todayBackgroundColor={this.props.configuration.theme.l4}     
-            />
-
-            {
-              (!this.state.loadingTask && this.state.tasks.length>0)  && 
-              <View style={{flex: 1, backgroundColor: "red"}}>
-                <Text>
-                  Tasks for {h.formatDate(this.state.dateTask)}
-                </Text>
-              </View>
-            }
-
-            {
-              (this.state.tasks.length==0 && !this.state.loadingTask) && 
-
-              <View style={{alignItems:'center'}}>
-                  <Text>No tasks found for {h.formatDate(this.state.dateTask) }</Text>
-                  <Button style={{top: 20}} title= "Add" color= {this.props.configuration.theme.l1} onPress={(e)=>this.props.navigation.navigate("NewTask", {date: this.state.dateTask})}></Button>
-              </View>
-            }
-          
-          <View style={{flex: 7}} >
-          
-              <AnimatedLoader
-              visible={this.state.loadingTask}
-              overlayColor="rgba(255,255,255,0)"
-              speed={0.8}
-              loop= {true}
-              animationStyle={{width: 40, height: 40, position: 'relative', top: 55,}}
-                />
-            
-          </View>
-
-         
-
-      </Content>
-
-
-      {
-        (!this.state.loadingTask && this.state.tasks.length>0)  && 
-
-      <DraggableFlatList
-          style= {{flex: 6}}
-          data={this.state.tasks}
-          renderItem={(stt)=> <TaskItemSecondary showDetails = {(id)=> this.showDetails(id)} stt={stt}/>}
-          keyExtractor={(item, index) => ""+item.IdTask}
-          scrollPercent={5}
-          onMoveEnd={({ data }) => this.moveEnd(data)}
-        />
-        
-        }
-
-        
 
       
-      {
-        this.state.tasks.length> 0 && 
+
+        <Container style={{backgroundColor: this.props.configuration.theme.l5 }}>
+          <NavigationEvents onDidFocus={payload => this._navigationUpdate(payload)}/>
+
+          <Header
+                style={styles.Header}
+
+                leftComponent={
+                  <TouchableOpacity onPress={(e) => this.props.navigation.navigate("Home") }>
+                    <FontAwesomeIcon size={30} icon={faHome} style={{ color: this.props.configuration.theme.l4 }} />
+                  </TouchableOpacity>
+                }
+                centerComponent={{ text: 'Tasks Program', style: {color: this.props.configuration.theme.l4, fontSize: 25} }}
+                
+                backgroundColor={this.props.configuration.theme.l1}
+                barStyle="light-content"
+                placement="right"
+                containerStyle= {{
+                  height:60,
+                  paddingBottom: 20
+                }}
+              />
+
+          <Content style={{flex: 1}}>
+          
+              <CalendarPicker
+                selectedStartDate= {this.state.dateTask}
+                style= {{flex: 2}}
+                onDateChange={(date) => this._onDateChange(date) }
+                selectedDayColor={this.props.configuration.theme.l3}
+                todayBackgroundColor={this.props.configuration.theme.l4}     
+                />
+
+                {
+                  (!this.state.loadingTask && this.state.tasks.length>0)  && 
+                  <View style={{flex: 1, backgroundColor: "red"}}>
+                    <Text>
+                      Tasks for {h.formatDate(this.state.dateTask)}
+                    </Text>
+                  </View>
+                }
+
+                {
+                  (this.state.tasks.length==0 && !this.state.loadingTask) && 
+
+                  <View style={{alignItems:'center'}}>
+                      <Text>No tasks found for {h.formatDate(this.state.dateTask) }</Text>
+                      <Button style={{top: 20}} title= "Add" color= {this.props.configuration.theme.l1} onPress={(e)=>this.props.navigation.navigate("NewTask", {date: this.state.dateTask})}></Button>
+                  </View>
+                }
+              
+              <View style={{flex: 7}} >
+              
+                  <AnimatedLoader
+                  visible={this.state.loadingTask}
+                  overlayColor="rgba(255,255,255,0)"
+                  speed={0.8}
+                  loop= {true}
+                  animationStyle={{width: 40, height: 40, position: 'relative', top: 55,}}
+                    />
+                
+              </View>
+
+            
+
+          </Content>
 
 
-      <TouchableOpacity style={{zIndex: 1000,alignItems: 'center', justifyContent:'center',backgroundColor: this.props.configuration.theme.l1, width: 60, height: 60, borderRadius: 30, position: 'absolute', right: 15, bottom: 15}}>
-       <Text style={{color: this.props.configuration.theme.l4, elevation: 8, fontSize: 25}}>+</Text>
-      </TouchableOpacity> 
-    }
+          {
+            (!this.state.loadingTask && this.state.tasks.length>0)  && 
 
-  </Container>
+          <DraggableFlatList
+              style= {{flex: 6}}
+              data={this.state.tasks}
+              renderItem={(stt)=> <TaskItemSecondary showDetails = {(id)=> this.showDetails(id)} stt={stt}/>}
+              keyExtractor={(item, index) => ""+item.IdTask}
+              scrollPercent={5}
+              onMoveEnd={({ data }) => this.moveEnd(data)}
+            />
+            
+            }
+
+            
+
+          
+          {
+            this.state.tasks.length> 0 && 
+
+
+          <TouchableOpacity style={{zIndex: 1000,alignItems: 'center', justifyContent:'center',backgroundColor: this.props.configuration.theme.l1, width: 60, height: 60, borderRadius: 30, position: 'absolute', right: 15, bottom: 15}}>
+          <Text style={{color: this.props.configuration.theme.l4, elevation: 8, fontSize: 25}}>+</Text>
+          </TouchableOpacity> 
+        }
+
+      </Container>
   
     );
   }

@@ -59,10 +59,10 @@ class Splash extends Component {
     h.findAll("settings").then(
       dataSettings => {
           console.log("loading configs...");
-          console.log(dataSettings);
-          console.log("hello");
+          // console.log(dataSettings);
+          
           this.props.dispatch({type: "UPDATE_SETTINGS", value: dataSettings});
-          console.log("bye2")
+        
           //Upadte the courrent active task
 
           let endTime = new Date();

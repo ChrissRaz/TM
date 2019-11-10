@@ -13,12 +13,9 @@ import { Container, Content } from 'native-base';
 
 import { connect } from 'react-redux';
 
-
-
 var moment = require("moment");
 
 import * as Progress from 'react-native-progress';
-
 
 import  * as h  from '../helpers/funcs';
 
@@ -43,14 +40,17 @@ class Home extends Component {
     this.props.dataManager.tasks.find(item => item.actif === true);
   }
 
+
   componentDidUpdate()
   {
     this.activeTask = this.props.dataManager.tasks.find(item => item.actif === true);
   }
 
+
   _optionsShow() {
     this.props.navigation.openDrawer();
   }
+
 
   _SwichDefaulftConfig() {
     
@@ -67,19 +67,24 @@ class Home extends Component {
     
   }
 
+
   _navigateNouveauRoutine() {
     this.props.navigation.navigate("NewTask");
   }
 
-  _showDetails(id)
+
+  _showDetails(task)
   {
-    this.props.navigation.navigate("Details",{IdTask: id});
+    this.props.navigation.navigate("NewTask",{date: task.date, selected: task.IdTask});
   }
+
 
   _openReorder(date)
   {
-    this.props.navigation.navigate("TaskLists");
+    this.props.navigation.navigate("TaskLists",{now: true});
   }
+
+
   _openHistory(date)
   {
     this.props.navigation.navigate("History", {taskDate: date});
@@ -121,7 +126,7 @@ class Home extends Component {
               
               this.activeTask != undefined &&
                 
-                <TouchableOpacity style={styles.activeTask} onPress={(e) => this._showDetails(this.activeTask.IdTask)}>
+                <TouchableOpacity style={styles.activeTask} onPress={(e) => this._showDetails(this.activeTask)}>
                   <Progress.Circle  color={"red"} animated= {false} thickness={6} showsText={true} progress={ h.getPercentage(this.activeTask)} size={125}  style= {styles.progressCircle}/>
 
                   <View style={styles.timeContainer}>
@@ -177,7 +182,7 @@ class Home extends Component {
               <FlatList 
               style= {{marginTop: 15}}
               data={this.props.dataManager.tasks.filter((item, index)=> item.actif===false)}
-              renderItem={({ item }) => <TaskItem task={item} navigate={(id)=>this._showDetails(id)}/>}
+              renderItem={({ item }) => <TaskItem task={item} navigate={(date,id)=>this._showDetails(date,id)}/>}
               keyExtractor={item => item.IdTask}
             />
 

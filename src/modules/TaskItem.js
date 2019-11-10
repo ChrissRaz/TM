@@ -37,7 +37,7 @@ class TaskItem extends Component {
 
   _openDetails()
   {
-    this.props.navigate(this.props.task.IdTask);
+    this.props.navigate(this.props.task.date,this.props.task.IdTask);
   }
 
   _launchTask(id)
@@ -57,7 +57,7 @@ class TaskItem extends Component {
       Alert.alert("Actions", "What do you want to do?", [
         {text: 'Details', onPress: () => (this._openDetails())},
         {text: 'Launch', onPress: () => this._swichToPredecessor()},
-        {text: 'Delete', onPress: () =>  this._deleteTask(this.props.task.IdTask)},
+        // {text: 'Delete', onPress: () =>  this._deleteTask(this.props.task.IdTask)},
       ],
       {cancelable: true},
       );

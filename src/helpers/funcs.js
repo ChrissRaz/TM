@@ -154,7 +154,7 @@ export const findTodayTask = async () => {
 
                                 assignedElapsedTime += nw - lastHistoryAsigned;
 
-                                el.history.push({ dateDebut: lastHistoryAsigned, dateFin: nw, off: true });
+                                el.history.push({ dateDebut: lastHistoryAsigned, dateFin: nw, off: false });
 
                                 if (TimeElapsedOff==assignedElapsedTime)
                                 {

@@ -24,6 +24,8 @@ import TaskItemRanger from './../modules/TaskItemRanger';
 class AddTsk extends Component {
   
   constructor(props) {
+
+    //state modes[0:"new",1:"modification"]
     super(props);
     this.state = {
       dateNewTasks: new Date() ,
@@ -33,7 +35,7 @@ class AddTsk extends Component {
       nextId: 0,
       validaTed: false,
       availableTime: 24*3600,
-      modificationMode: false
+      mode: 0
     };
   
 
@@ -69,6 +71,22 @@ class AddTsk extends Component {
           findAnotherDate: true,
         }
       );
+    }
+  }
+
+
+  _navigationUpdate(payload)
+  {
+    //manipuler ici les navigations près
+    console.log(payload.action.params);
+
+    switch (key) {
+      case value:
+        
+        break;
+    
+      default:
+        break;
     }
   }
 
@@ -296,7 +314,7 @@ class AddTsk extends Component {
       ...this.state,
     openInEditor: task 
   })
-  }
+  } 
 
 
   _changeDateModeChange()
@@ -306,6 +324,7 @@ class AddTsk extends Component {
       findAnotherDate: !this.state.findAnotherDate
     });
   }
+
 
   _onDateChange(date)
   {
@@ -328,10 +347,11 @@ _finish()
 
   render() {
     return (
-      <NavigationEvents onDidFocus={payload => console.debug('didBlur', payload)}>
 
      
         <Container style={{backgroundColor: this.props.configuration.theme.l5 }}>
+        <NavigationEvents onDidFocus={payload => this._navigationUpdate(payload)}/>
+
         <Header
               style={styles.header}
 
@@ -340,7 +360,7 @@ _finish()
                   <FontAwesomeIcon size={30} icon={faHome} style={{ color: this.props.configuration.theme.l4 }} />
                 </TouchableOpacity>
               }
-              centerComponent={{ text: !this.state.modificationMode? 'Add new tasks ': 'Task modification', style: {color: this.props.configuration.theme.l4, fontSize: 25} }}
+              centerComponent={{ text: !this.state.mode==0? 'Add new tasks ': 'Task modification', style: {color: this.props.configuration.theme.l4, fontSize: 25} }}
               
               backgroundColor={this.props.configuration.theme.l1}
               barStyle="light-content"
@@ -499,7 +519,7 @@ _finish()
 
     </Container>
     
-      </NavigationEvents>
+      
     
     );
   }
